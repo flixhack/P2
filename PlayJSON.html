@@ -73,9 +73,20 @@
         var bus = midibus.bus(midibus.inputs[0], midibus.outputs[0])
 
         //Loop plays all notes from the JSON file
+
+        /* -----Outputs from JSON-----
+        jsonOutput.track[] === Channel/Instrument
+        jsonOutput.note[] === Containing infomation about the different notes
+        jsonOutput.midi[] === Chord
+        jsonOutput.velocity === velocity
+        jsonOutput.time === When the chord start playing
+        jsonOutput.duration === How long the chord is playing
+        */
+
+
         for (var i = 0; i < 16; i++) {
             console.log("pre: " + i); //For testing
-            
+
             window.setTimeout(function () {
             console.log("[" + i + "]" + jsonOutput.tracks[0].notes[i].midi);
             bus.send('noteOff', midibus.message(0, jsonOutput.tracks[0].notes[i].midi, 128*(jsonOutput.tracks[0].notes[i].velocity) -1))
