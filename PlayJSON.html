@@ -4,75 +4,93 @@
 
   <head>
 
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <title>WebMidi.js Quick Start</title>
 
-    <title>midi.js</title>
+    <script src="https://cdn.jsdelivr.net/npm/webmidi@next/dist/iife/webmidi.iife.js"></script>
 
-    <meta name="description" content="Web MIDI API wrapper based on themidibus">
+    <script type="module">
 
-    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,minimal-ui">
-    <script src="scripts/jquery-3.6.0.js"></script>
-    <script src="scripts/midibus.umd.js"></script>
-    <script type="text/javascript" src="scripts/demo.js"></script>
+      // Enable WebMidi.js and trigger the onEnabled() function when ready.
+      WebMidi
+        .enable()
+        .then(onEnabled)
+        .catch(err => alert(err));
 
+      function onEnabled() {
 
+        if (WebMidi.inputs.length < 1) {
+          document.body.innerHTML+= "No device detected.";
+        } else {
+          WebMidi.inputs.forEach((device, index) => {
+            document.body.innerHTML+= `${index}: ${device.name} <br>`;
+          });
+        }
 
-    <style>
-      body {
-        margin: 30px;
-        font-family: sans-serif;
-        font-weight: 200;
-        font-size: 20px;
+        const mySynth = WebMidi.inputs[0];
+        // const mySynth = WebMidi.getInputByName("TYPE NAME HERE!")
+
+        mySynth.channels[1].addListener("noteon", e => {
+          document.body.innerHTML+= `${e.note.name} <br>`;
+        });
+
       }
-      a {
-        text-decoration: none;
-      }
-      h1 {
-        font-weight: inherit;
-        font-size: 2em;
-      }
-      h2 {
-        font-weight: inherit;
-        font-size: inherit;
-        border-bottom: 1px solid #ccc;
-        padding-bottom: 50px;
-        margin-bottom: 50px;
-      }
-    </style>
+
+    </script>
 
   </head>
 
   <body>
+    <h1>WebMidi.js Quick Start</h1>
+  </body>
 
+</html><!DOCTYPE html>
 
+<html lang="en">
 
-      <!-- <input id="destroyBus" type="button" value="Dæd" onclick="destroyBus();" /> -->
+  <head>
 
-      <!-- <script type="text/javascript">
-      document.getElementById("destroyBus").onclick = destroyBus();
-      </script> -->
+    <meta charset="UTF-8">
+    <title>WebMidi.js Quick Start</title>
 
-      <button onclick="destroyBus()">Destroy bus</button>
-      <!-- <script type="text/javascript">
-      $(document).ready(function(){
-          $("#destroy").click(function() {
-              alert("Virker det??");
-              destroyBus();
-          })
-      })
+    <script src="https://cdn.jsdelivr.net/npm/webmidi@next/dist/iife/webmidi.iife.js"></script>
 
-      </script>
-      <input type="button" id="destroy" value="Destroy Bus" name="destroy"> -->
+    <script type="module">
 
+      // Enable WebMidi.js and trigger the onEnabled() function when ready.
+      WebMidi
+        .enable()
+        .then(onEnabled)
+        .catch(err => alert(err));
 
-      <h1>midibus.js</h1>
+      function onEnabled() {
 
-      <main>
+        if (WebMidi.inputs.length < 1) {
+          document.body.innerHTML+= "No device detected.";
+        } else {
+          WebMidi.inputs.forEach((device, index) => {
+            document.body.innerHTML+= `${index}: ${device.name} <br>`;
+          });
+        }
 
+        const mySynth = WebMidi.inputs[0];
+        // const mySynth = WebMidi.getInputByName("TYPE NAME HERE!")
 
-    </main>
+        mySynth.channels[1].addListener("noteon", e => {
+          document.body.innerHTML+= `${e.note.name} <br>`;
+        });
 
+        const myOutput = WebMidi.outputs[0];
+        myOutput.playNote("Gb4", [1, 2, 3]);
 
+      }
+
+    </script>
+
+  </head>
+
+  <body>
+    <h1>WebMidi.js Quick Start</h1>
   </body>
 
 </html>
