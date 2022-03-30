@@ -11,77 +11,32 @@
 
     <script type="module">
 
+        //Accessing the JSON file and logs a simple test
+        var xhReq = new XMLHttpRequest();
+        xhReq.open("GET", "./midiTest.json", false);
+        xhReq.send(null);
+        var jsonOutput = JSON.parse(xhReq.responseText);
+        console.log("test: " + jsonOutput.tracks[0].notes[0].midi);
+
       // Enable WebMidi.js and trigger the onEnabled() function when ready.
       WebMidi
-        .enable()
-        .then(onEnabled)
-        .catch(err => alert(err));
+      .enable()
+      .then(onEnabled)
+      .catch(err => alert(err));
 
       function onEnabled() {
+  
+      // Inputs
+      WebMidi.inputs.forEach(input => console.log(input.manufacturer, input.name));
+  
+      // Outputs
+      WebMidi.outputs.forEach(output => console.log(output.manufacturer, output.name));
 
-        if (WebMidi.inputs.length < 1) {
-          document.body.innerHTML+= "No device detected.";
-        } else {
-          WebMidi.inputs.forEach((device, index) => {
-            document.body.innerHTML+= `${index}: ${device.name} <br>`;
-          });
-        }
-
-        const mySynth = WebMidi.inputs[0];
-        // const mySynth = WebMidi.getInputByName("TYPE NAME HERE!")
-
-        mySynth.channels[1].addListener("noteon", e => {
-          document.body.innerHTML+= `${e.note.name} <br>`;
-        });
-
+      for (var i = 0; i < jsonOutput.tracks[0].notes.length; i++) {
+      let myOutput = WebMidi.outputs[0];
+      let myChannel = myOutput.channels[1];
+      myChannel.playNote(jsonOutput.tracks[0].notes[i].name, {duration: jsonOutput.tracks[0].notes[i].duration*1000, attack: jsonOutput.tracks[0].notes[i].velocity, time: jsonOutput.tracks[0].notes[i].time*1000}, );
       }
-
-    </script>
-
-  </head>
-
-  <body>
-    <h1>WebMidi.js Quick Start</h1>
-  </body>
-
-</html><!DOCTYPE html>
-
-<html lang="en">
-
-  <head>
-
-    <meta charset="UTF-8">
-    <title>WebMidi.js Quick Start</title>
-
-    <script src="https://cdn.jsdelivr.net/npm/webmidi@next/dist/iife/webmidi.iife.js"></script>
-
-    <script type="module">
-
-      // Enable WebMidi.js and trigger the onEnabled() function when ready.
-      WebMidi
-        .enable()
-        .then(onEnabled)
-        .catch(err => alert(err));
-
-      function onEnabled() {
-
-        if (WebMidi.inputs.length < 1) {
-          document.body.innerHTML+= "No device detected.";
-        } else {
-          WebMidi.inputs.forEach((device, index) => {
-            document.body.innerHTML+= `${index}: ${device.name} <br>`;
-          });
-        }
-
-        const mySynth = WebMidi.inputs[0];
-        // const mySynth = WebMidi.getInputByName("TYPE NAME HERE!")
-
-        mySynth.channels[1].addListener("noteon", e => {
-          document.body.innerHTML+= `${e.note.name} <br>`;
-        });
-
-        const myOutput = WebMidi.outputs[0];
-        myOutput.playNote("Gb4", [1, 2, 3]);
 
       }
 
