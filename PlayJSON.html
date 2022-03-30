@@ -11,12 +11,12 @@
 
     <script type="module">
 
-        //Accessing the JSON file and logs a simple test
-        var xhReq = new XMLHttpRequest();
-        xhReq.open("GET", "./midiTest.json", false);
-        xhReq.send(null);
-        var jsonOutput = JSON.parse(xhReq.responseText);
-        console.log("test: " + jsonOutput.tracks[0].notes[0].midi);
+      //Accessing the JSON file and logs a simple test
+      var xhReq = new XMLHttpRequest();
+      xhReq.open("GET", "./midiTest.json", false);
+      xhReq.send(null);
+      var jsonOutput = JSON.parse(xhReq.responseText);
+      console.log("test: " + jsonOutput.tracks[0].notes[0].midi);
 
       // Enable WebMidi.js and trigger the onEnabled() function when ready.
       WebMidi
@@ -26,17 +26,17 @@
 
       function onEnabled() {
   
-      // Inputs
-      WebMidi.inputs.forEach(input => console.log(input.manufacturer, input.name));
+        // Inputs
+        WebMidi.inputs.forEach(input => console.log(input.manufacturer, input.name));
   
-      // Outputs
-      WebMidi.outputs.forEach(output => console.log(output.manufacturer, output.name));
+        // Outputs
+        WebMidi.outputs.forEach(output => console.log(output.manufacturer, output.name));
 
-      for (var i = 0; i < jsonOutput.tracks[0].notes.length; i++) {
-      let myOutput = WebMidi.outputs[0];
-      let myChannel = myOutput.channels[1];
-      myChannel.playNote(jsonOutput.tracks[0].notes[i].name, {duration: jsonOutput.tracks[0].notes[i].duration*1000, attack: jsonOutput.tracks[0].notes[i].velocity, time: jsonOutput.tracks[0].notes[i].time*1000}, );
-      }
+        for (var i = 0; i < jsonOutput.tracks[0].notes.length; i++) {
+          let myOutput = WebMidi.outputs[0];
+          let myChannel = myOutput.channels[1];
+          myChannel.playNote(jsonOutput.tracks[0].notes[i].name, {duration: jsonOutput.tracks[0].notes[i].duration*1000, attack: jsonOutput.tracks[0].notes[i].velocity, time: jsonOutput.tracks[0].notes[i].time*1000}, );
+        }
 
       }
 
