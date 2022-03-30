@@ -16,11 +16,11 @@ midibus.access(function () {
 
   console.log(bus);
   // destroyBus();
-  function destroyBus() {
-    console.log("Hej");
-    bus.destroy()
-  }
 
   console.log(bus);
   // console.log(midibus.inputs[0] , midibus.outputs[0]);
 })
+function destroyBus() {
+    console.log("Hej");
+    bus.destroy()
+}

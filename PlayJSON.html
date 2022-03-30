@@ -11,6 +11,9 @@
     <meta name="description" content="Web MIDI API wrapper based on themidibus">
 
     <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,minimal-ui">
+    <script src="scripts/jquery-3.6.0.js"></script>
+    <script src="scripts/midibus.umd.js"></script>
+    <script type="text/javascript" src="scripts/demo.js"></script>
 
 
 
@@ -41,26 +44,30 @@
 
   <body>
 
-    <main>
 
-      <script src="scripts/midibus.umd.js"></script>
-      <script src="scripts/demo.js"></script>
 
-      <input id="destroyBus" type="button" value="Dæd" onclick="destroyBus();" />
+      <!-- <input id="destroyBus" type="button" value="Dæd" onclick="destroyBus();" /> -->
 
-      <script type="text/javascript">
-      document.getElementById("destroyBus").onclick = function () { bus.destroy(); console.log("Hej"); };
-      // document.getElementById("destroyBus").onclick = destroyBus;
+      <!-- <script type="text/javascript">
+      document.getElementById("destroyBus").onclick = destroyBus();
+      </script> -->
+
+      <button onclick="destroyBus()">Destroy bus</button>
+      <!-- <script type="text/javascript">
+      $(document).ready(function(){
+          $("#destroy").click(function() {
+              alert("Virker det??");
+              destroyBus();
+          })
+      })
+
       </script>
+      <input type="button" id="destroy" value="Destroy Bus" name="destroy"> -->
 
-      <!-- <script src="scripts/playMidi.js"></script> -->
 
       <h1>midibus.js</h1>
 
-
-
-      <!-- <button onclick="myFunction()">Connect Bus</button> -->
-      <!-- <button onclick="myFunction()">Play Demo</button> -->
+      <main>
 
 
     </main>
