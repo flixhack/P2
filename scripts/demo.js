@@ -11,44 +11,16 @@ function logMidiIO() {
   WebMidi.outputs.forEach(output => console.log(output.manufacturer, output.name));
 }
 
+async function getData(url) {
+  const response = await fetch(url);
+
+  return response.json();
+}
+
 //Loads and plays the JSON file
-function playDemo(jsonURL) {
-
-  //Loads the JSON file
-  // var xhReq = new XMLHttpRequest();
-  // xhReq.open("GET", jsonURL, false);
-  // xhReq.send(null); 
-  // var jsonOutput = JSON.parse(xhReq.responseText);
-  // console.log("test: " + jsonOutput.tracks[0].notes[0].midi);
-  // console.log(jsonOutput.tracks);
-
-  console.log("Heartbeat");
-  // fetch('JSON/all_star.json')
-  // .then(response => response.json())
-  // .then(data => console.log(data));
-
-  // let jsonOutput;    
-  // fetch(jsonURL).then(function(u){
-  //   return u.json();})
-  // .then(function(json){
-  //   jsonOutput = json;})
-
-    async function getData(url) {
-      const response = await fetch(url);
+async function playDemo(jsonURL) {
     
-      return response.json();
-    }
-    
-    const data = await getData(url);
-    
-    console.log({ data })
-
-    getData(jsonURL)
-
-  // fetch(jsonURL)
-  //   .then(response => jsonResponse)
-  //   .then(data => jsonOutput);
-  // console.log(jsonResponse);
+  let jsonOutput = await getData("JSON/all_star.json");
   console.log(jsonOutput.tracks);
 
   //Plays the file
@@ -70,7 +42,7 @@ function playDemo(jsonURL) {
     // channelSix.playNote(jsonOutput.tracks[5].notes[i].name, {duration: jsonOutput.tracks[5].notes[i].duration*1000, attack: jsonOutput.tracks[5].notes[i].velocity, time: "+"+jsonOutput.tracks[5].notes[i].time*1000});
     // channelSeven.playNote(jsonOutput.tracks[6].notes[i].name, {duration: jsonOutput.tracks[6].notes[i].duration*1000, attack: jsonOutput.tracks[6].notes[i].velocity, time: "+"+jsonOutput.tracks[6].notes[i].time*1000});
     // channelEight.playNote(jsonOutput.tracks[7].notes[i].name, {duration: jsonOutput.tracks[7].notes[i].duration*1000, attack: jsonOutput.tracks[7].notes[i].velocity, time: "+"+jsonOutput.tracks[7].notes[i].time*1000});
-    console.log(jsonOutput.tracks[7].notes[i].name);
+    // console.log(jsonOutput.tracks[7].notes[i].name);
   }
 }
 
