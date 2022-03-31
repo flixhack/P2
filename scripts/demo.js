@@ -19,7 +19,7 @@ async function getData(url) {
 
 //Loads and plays the JSON file
 async function playDemo(jsonURL) {
-    
+
   let jsonOutput = await getData("JSON/all_star.json");
   console.log(jsonOutput.tracks);
 
@@ -88,7 +88,7 @@ async function playDemo(jsonURL) {
     // if (i < jsonOutput.tracks[14].notes.length) {
     //   channelFifteen.playNote(jsonOutput.tracks[14].notes[i].name, {duration: jsonOutput.tracks[14].notes[i].duration*1000, attack: jsonOutput.tracks[14].notes[i].velocity, time: "+"+jsonOutput.tracks[14].notes[i].time*1000});
     // }
-    // if (i < jsonOutput.tracks[15].notes.length) { 
+    // if (i < jsonOutput.tracks[15].notes.length) {
     //   channelSixteen.playNote(jsonOutput.tracks[15].notes[i].name, {duration: jsonOutput.tracks[15].notes[i].duration*1000, attack: jsonOutput.tracks[15].notes[i].velocity, time: "+"+jsonOutput.tracks[15].notes[i].time*1000});
     // }
   }
