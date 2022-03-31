@@ -1,49 +1,26 @@
+<!DOCTYPE html>
+
 <html lang="en">
 
   <head>
 
     <meta charset="UTF-8">
-    <title>WebMidi.js Quick Start</title>
+    <title>PlayJSON</title>
 
     <script src="https://cdn.jsdelivr.net/npm/webmidi@next/dist/iife/webmidi.iife.js"></script>
-
-    <script type="module">
-
-      //Accessing the JSON file and logs a simple test
-      var xhReq = new XMLHttpRequest();
-      xhReq.open("GET", "./midiTest.json", false);
-      xhReq.send(null);
-      var jsonOutput = JSON.parse(xhReq.responseText);
-      console.log("test: " + jsonOutput.tracks[0].notes[0].midi);
-
-      // Enable WebMidi.js and trigger the onEnabled() function when ready.
-      WebMidi
-      .enable()
-      .then(onEnabled)
-      .catch(err => alert(err));
-
-      function onEnabled() {
-  
-        // Inputs
-        WebMidi.inputs.forEach(input => console.log(input.manufacturer, input.name));
-  
-        // Outputs
-        WebMidi.outputs.forEach(output => console.log(output.manufacturer, output.name));
-
-        for (var i = 0; i < jsonOutput.tracks[0].notes.length; i++) {
-          let myOutput = WebMidi.outputs[0];
-          let myChannel = myOutput.channels[1];
-          myChannel.playNote(jsonOutput.tracks[0].notes[i].name, {duration: jsonOutput.tracks[0].notes[i].duration*1000, attack: jsonOutput.tracks[0].notes[i].velocity, time: jsonOutput.tracks[0].notes[i].time*1000}, );
-        }
-
-      }
-
-    </script>
+    <script src="scripts/demo.js"></script>
 
   </head>
 
   <body>
-    <h1>WebMidi.js Quick Start</h1>
+    <h1>WebMIDI Demo</h1>
+
+    <button onclick="enableWebMidi()">Enable WebMIDI</button>
+    <button onclick="logMidiIO()">Log MIDI I/O</button>
+    <button onclick="playDemo('JSON/all_star.json')">Play Demo</button>
+    <button onclick="playDemo('JSON/epic_sax_guy.json')">Play Epic Sax Guy</button>
+    <button onclick="disableWebMidi()">Disable WebMIDI</button>
+
   </body>
 
 </html>
