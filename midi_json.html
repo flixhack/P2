@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Tonejs Midi</title>
+		<script
+			type="text/javascript"
+			src="https://unpkg.com/tone@latest/build/Tone.js"
+		></script>
+		<script
+			type="text/javascript"
+			src="https://unpkg.com/@tonejs/ui@0.0.8/build/tonejs-ui.js"
+		></script>
+		<script
+			type="text/javascript"
+			src="https://unpkg.com/@tonejs/midi"
+		></script>
+		<link rel="stylesheet" href="midi to json.css">
+	</head>
+	<body>
+		<tone-top-bar></tone-top-bar>
+		<div id="Description">
+	 		<b>CONVERT MIDI FILES INTO JSON FORMAT</b>
+		</div>
+		<div class="main">
+			<div id="mellem1"></div>
+			<div class='form-group'>
+				<label><b>Choose one or many files:</b></label>
+				<br> <br>
+				<input id='input' type='file' accept='audio/midi' multiple/>
+				<div id='input-display'></div> 
+				<div class='form-group'>
+					<button onclick="check()">Check output Json</button><br>
+					<span><small><i>(view in console: F12)</small></i></span>
+				</div>
+				
+			</div>
+			
+		  	<div id="Results">
+				<textarea
+					id="ResultsText"
+					placeholder="json output..."
+				></textarea>
+				<tone-play-toggle disabled></tone-play-toggle>
+			</div>
+			<div id="mellem2"></div>
+		</div>
+		<script src="midi to json.js"></script>
+	</body>	
+</html>		
+		
+		
+		
+		
+			
+			
+
+		
+			
+		
