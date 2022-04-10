@@ -27,15 +27,11 @@ function inputFile(event) {
 	document.querySelector(
 				"#ResultsText"
 			).value = ''
-	if (Array.isArray(inputSave[key])) {
-		inputSave[key].push(selectedFile)
-	} else {
-		inputSave[key] = selectedFile
-	}
+	inputSave[key] = (selectedFile)
 	parseFile(selectedFile, key)
 } 
 		
-// check json in screen (new)
+// check json in the screen (new)
 function checkjson(event) { 
 let id_navn = event.target.id
 	for(let i=0; i<id_button.length; i++) {
@@ -74,25 +70,26 @@ function parseFile(file, key1) {
 	const midi = new Midi(e.target.result);
 	let json = JSON.stringify(midi, undefined, 2);
 
-	if (Array.isArray(jsonSave[key1])) {             // (new)
-		add_json(key1, json)
-	} else {
+	if (Object.entries(jsonSave).length === 0) {  // (new)
 		jsonSave[key1] = json
+	} else {
+		add_json(key1, json)
 	}
 	currentMidi = midi;
 	};
 	reader.readAsArrayBuffer(file);
 }
 
-// add json files (new)
+// add and connect json files (new)
 function add_json(key, json) {
 	for(let check in jsonSave) {
 		if(check == key) {
 			let temp = jsonSave[key]
-			console.log(temp)
-			console.log(json)
-			jsonSave[key] = (temp).concat(json)
-		} else {jsonSave[key].push(json)}
+			jsonSave[key] = (temp).concat(json)  //connect (same channel)
+			break
+		} else {jsonSave[key] = (json)  //add (new channel)
+		   	break
+		}
 	}
 }
 
