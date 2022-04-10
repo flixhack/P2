@@ -1,61 +1,99 @@
 
-// input MIDI files from pc
-var input = document.getElementById('input');
-var inputList = [];
-var inputSave = [];
+// Get MIDI files from pc (simulation program)
+var inputs = document.querySelectorAll('[name]');
+var checks = document.querySelectorAll('button')
+var inputSave = {}
+var jsonSave = {}
+var id_input = []
+var id_button = []
+var currentMidi = null
 
-input.addEventListener('change', function (e) {
-	inputList = [];
-	for (var i = 0; i < input.files.length; i++) {
-	  	inputList.push(input.files[i]);
-	  	inputSave.push(input.files[i]);
- 		parseFile(inputList[i]);
-  	}
-  	screenList();
-});
+// Control input button (new)
+for(var input of inputs) {
+	id_input.push(input.id)
+	input.onchange = inputFile 
+}
 
-// print list of files to screen
-var inputDisplay = document.getElementById('input-display');
-var screenList = function () {
-	inputDisplay.innerHTML = '';
-  	inputList.forEach(function (file, index) {
-		var Display = document.createElement('p');
-		Display.innerHTML = (index + 1) + ': ' + file.name;
-		inputDisplay.appendChild(Display);
-  	});
-};
+// check json output (new)
+for (var check of checks) {
+	id_button.push(check.id)
+	check.onclick = checkjson
+}
 
-// check output json files in console window
-function check() { 
-	console.log(inputList);
-	for (var i = 0; i < inputList.length; i++) {
-	  console.log(outputJson[i]);
+// get MIDI files (new)
+function inputFile(event) {
+	const selectedFile = event.target.files[0];
+	var key = event.target.id
+	document.querySelector(
+				"#ResultsText"
+			).value = ''
+	if (Array.isArray(inputSave[key])) {
+		inputSave[key].push(selectedFile)
+	} else {
+		inputSave[key] = selectedFile
 	}
-  }
+	parseFile(selectedFile, key)
+} 
+		
+// check json in screen (new)
+function checkjson(event) { 
+let id_navn = event.target.id
+	for(let i=0; i<id_button.length; i++) {
+		if (id_button[i]==id_navn) {
+			let a=i
+			for(let j=0; j<id_input.length; j++) {
+				if (j==a) {
+					take_json(id_input[a])
+					break
+				}
+			}
+		}
+	}
+}
 
-// json files storage
-var outputJson = []; 
+// copy json from jsonSave (new)
+function take_json(index) {
+	for (let key in jsonSave) {
+		if (key==index) {
+			json = jsonSave[index]
+			document.querySelector(
+				"#ResultsText"
+			).value = json;
+			document
+			.querySelector("tone-play-toggle")
+			.removeAttribute("disabled")
+		}
+	}	
+}
+	
 // convert MIDI to json (code from program Demo)
-let currentMidi = null;
-function parseFile(file) {
+function parseFile(file, key1) {
 	// read the file
-	outputJsonList = []
 	const reader = new FileReader();
 	reader.onload = function (e) {
 	const midi = new Midi(e.target.result);
-
 	let json = JSON.stringify(midi, undefined, 2);
-	outputJson.push(json);
-		
-	document.querySelector(
-				"#ResultsText"
-			).value = json;
-		document
-			.querySelector("tone-play-toggle")
-			.removeAttribute("disabled");
-		currentMidi = midi;
+
+	if (Array.isArray(jsonSave[key1])) {             // (new)
+		add_json(key1, json)
+	} else {
+		jsonSave[key1] = json
+	}
+	currentMidi = midi;
 	};
 	reader.readAsArrayBuffer(file);
+}
+
+// add json files (new)
+function add_json(key, json) {
+	for(let check in jsonSave) {
+		if(check == key) {
+			let temp = jsonSave[key]
+			console.log(temp)
+			console.log(json)
+			jsonSave[key] = (temp).concat(json)
+		} else {jsonSave[key].push(json)}
+	}
 }
 
 // play MIDI file (code from program Demo)
@@ -94,4 +132,4 @@ document
 				synth.disconnect();
 			}
 		}
-	});
+	})

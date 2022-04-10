@@ -24,25 +24,55 @@
 		<div class="main">
 			<div id="mellem1"></div>
 			<div class='form-group'>
-				<label><b>Choose one or many files:</b></label>
-				<br> <br>
-				<input id='input' type='file' accept='audio/midi' multiple/>
-				<div id='input-display'></div> 
-				<div class='form-group'>
-					<button onclick="check()">Check output Json</button><br>
-					<span><small><i>(view in console: F12)</small></i></span>
-				</div>
-				
+				<label><b>Choose MIDI files:</b></label><br><br>
+				<div>Channel 01:<input id='input1' type='file' accept='audio/midi' name='input'/></div>
+				<div>Channel 02:<input id='input2' type='file' accept='audio/midi' name='input'/></div>
+				<div>Channel 03:<input id='input3' type='file' accept='audio/midi' name='input'/></div>
+				<div>Channel 04:<input id='input4' type='file' accept='audio/midi' name='input'/></div>
+				<div>Channel 05:<input id='input5' type='file' accept='audio/midi' name='input'/></div>
+				<div>Channel 06:<input id='input6' type='file' accept='audio/midi' name='input'/></div>
+				<div>Channel 07:<input id='input7' type='file' accept='audio/midi' name='input'/></div>
+				<div>Channel 08:<input id='input8' type='file' accept='audio/midi' name='input'/></div>
+				<div>Channel 09:<input id='input9' type='file' accept='audio/midi' name='input'/></div>
+				<div>Channel 10:<input id='input10' type='file' accept='audio/midi' name='input'/></div>
+				<div>Channel 11:<input id='input11' type='file' accept='audio/midi' name='input'/></div>
+				<div>Channel 12:<input id='input12' type='file' accept='audio/midi' name='input'/></div>
+				<div>Channel 13:<input id='input13' type='file' accept='audio/midi' name='input'/></div>
+				<div>Channel 14:<input id='input14' type='file' accept='audio/midi' name='input'/></div>
+				<div>Channel 15:<input id='input15' type='file' accept='audio/midi' name='input'/></div>
+				<div>Channel 16:<input id='input16' type='file' accept='audio/midi' name='input'/></div>
+				<br>				
+			</div>
+		
+			<div id="mellem2"></div>
+			<div class='form-group'>
+				<label><b>Check and play:</b></label><br><br>
+				<button id="Channel1">Channel 01</button><br>
+				<button id="Channel2">Channel 02</button><br>
+				<button id="Channel3" >Channel 03</button><br>
+				<button id="Channel4">Channel 04</button><br>
+				<button id="Channel5">Channel 05</button><br>
+				<button id="Channel6">Channel 06</button><br>
+				<button id="Channel7">Channel 07</button><br>
+				<button id="Channel8">Channel 08</button><br>
+				<button id="Channel9">Channel 09</button><br>
+				<button id="Channel10">Channel 10</button><br>
+				<button id="Channel11">Channel 11</button><br>
+				<button id="Channel12">Channel 12</button><br>
+				<button id="Channel13">Channel 13</button><br>
+				<button id="Channel14">Channel 14</button><br>
+				<button id="Channel15">Channel 15</button><br>
+				<button id="Channel16">Channel 16</button><br>			
 			</div>
 			
-		  	<div id="Results">
+			<div id="Results">
 				<textarea
 					id="ResultsText"
 					placeholder="json output..."
 				></textarea>
 				<tone-play-toggle disabled></tone-play-toggle>
 			</div>
-			<div id="mellem2"></div>
+			<div id="mellem3"></div>
 		</div>
 		<script src="midi_json.js"></script>
 	</body>	

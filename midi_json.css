@@ -3,10 +3,14 @@
     display: flex
 }
 #mellem1 {
-    width: 15%
+    width: 5%
 }
+
 #mellem2 {
-    width: 20%
+    width: 5%
+}
+#mellem3 {
+    width: 5%
 }
 textarea {
     font-family: monospace;
@@ -18,7 +22,7 @@ textarea {
 
 #Results {
     position: relative;
-    width: 55%;
+    width: 40%;
     margin: 10px auto;
 }
 
