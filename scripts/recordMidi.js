@@ -48,23 +48,34 @@ function test() {
 }
 
 function testTwo() {
-      let track = new MidiWriter.Track();
+  let track = new MidiWriter.Track();
 
-      track.addEvent([
-        new MidiWriter.NoteEvent({pitch: ['E4'], duration: '4'}),
-        new MidiWriter.NoteEvent({pitch: ['D4'], duration: '4', startTick: '1024'}),
-        new MidiWriter.NoteEvent({pitch: ['C4'], duration: '2', startTick: '1536'}),
-        new MidiWriter.NoteEvent({pitch: ['E4','D4'], duration: '4'}),
-        new MidiWriter.NoteEvent({pitch: ['C4'], duration: '2'}),
-        new MidiWriter.NoteEvent({pitch: ['C4', 'C4', 'C4', 'C4', 'D4', 'D4', 'D4', 'D4'], duration: '8'}),
-        new MidiWriter.NoteEvent({pitch: ['E4','D4'], duration: '4'}),
-        new MidiWriter.NoteEvent({pitch: ['C4'], duration: '2'})
-      ], function(event, index) {
-          return {sequential: false};
-      }
-      );
+  track.addEvent([
+    new MidiWriter.NoteEvent({pitch: ['E4'], duration: '4'}),
+    new MidiWriter.NoteEvent({pitch: ['D4'], duration: '4', startTick: '1024'}),
+    new MidiWriter.NoteEvent({pitch: ['C4'], duration: '2', startTick: '1536'}),
+    new MidiWriter.NoteEvent({pitch: ['E4','D4'], duration: '4'}),
+    new MidiWriter.NoteEvent({pitch: ['C4'], duration: '2'}),
+    new MidiWriter.NoteEvent({pitch: ['C4', 'C4', 'C4', 'C4', 'D4', 'D4', 'D4', 'D4'], duration: '8'}),
+    new MidiWriter.NoteEvent({pitch: ['E4','D4'], duration: '4'}),
+    new MidiWriter.NoteEvent({pitch: ['C4'], duration: '2'})
+  ], function(event, index) {
+    return {sequential: false};
+  }
+  );
 
-      let write = new MidiWriter.Writer(track);
-      console.log(write.dataUri());
-      console.log("test"); 
+  let write = new MidiWriter.Writer(track);
+  console.log(write.dataUri());
+  console.log("test"); 
+
+  
+
+
+
+}
+
+function arrayToTrack(noteArray){
+  for(var i = 0; noteArray.length; i++){
+    track.addEvent(noteArray[i]);
+  }
 }
