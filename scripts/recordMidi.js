@@ -1,13 +1,14 @@
 function test() {
-    WebMidi
-    .enable()
-    .then(onEnabled)
+  WebMidi
+  .enable()
+  .then(onEnabled)
 
   function onEnabled() {
 
     if (WebMidi.inputs.length < 1) {
       document.body.innerHTML+= "No device detected.";
-    } else {
+    } 
+    else {
       WebMidi.inputs.forEach((device, index) => {
         document.body.innerHTML+= `${index}: ${device.name} <br>`;
       });
@@ -38,12 +39,12 @@ function test() {
     });
 
     mySynth.channels[1].addListener("noteoff", e => {
-        document.body.innerHTML+= `${e.timestamp} <br>`;
-        duration = e.timestamp - startTime;
+      document.body.innerHTML+= `${e.timestamp} <br>`;
+      duration = e.timestamp - startTime;
 
-        console.log("Name: " + noteName + noteAccidental + noteOctave + "\nVelocity: " + velocity + "\nstartTime: " + startTime + "\nduration: " + duration);
-      });
-    }
+      console.log("Name: " + noteName + noteAccidental + noteOctave + "\nVelocity: " + velocity + "\nstartTime: " + startTime + "\nduration: " + duration);
+    });
+  }
 }
 
 function testTwo() {
