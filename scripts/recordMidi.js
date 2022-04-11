@@ -24,18 +24,18 @@ function test() {
     let duration;
 
     mySynth.channels[1].addListener("noteon", e => {
-        noteName = e.note.name;
-        //The accidental will return "undefined" if there is no accidental, so we need to check for that to avoid an invalid note
-        if (e.note.accidental == "#") {
-            noteAccidental = e.note.accidental;
-        }
-        else {
-            noteAccidental = "";
-        }
-        noteOctave = e.note.octave;
-        velocity = e.rawValue;
-        startTime = e.timestamp;
-        return noteName, velocity, startTime;
+      noteName = e.note.name;
+      //The accidental will return "undefined" if there is no accidental, so we need to check for that to avoid an invalid note
+      if (e.note.accidental == "#") {
+          noteAccidental = e.note.accidental;
+      }
+      else {
+          noteAccidental = "";
+      }
+      noteOctave = e.note.octave;
+      velocity = e.rawValue;
+      startTime = e.timestamp;
+      return noteName, velocity, startTime;
     });
 
     mySynth.channels[1].addListener("noteoff", e => {
