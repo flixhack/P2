@@ -1,7 +1,7 @@
 function enableWebMidi() {
   WebMidi.enable()
   .then(() => console.log("WebMIDI Enabled"));
-  }
+ }
 
 function logMidiIO() {
   // Inputs
