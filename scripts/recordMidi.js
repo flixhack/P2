@@ -10,12 +10,16 @@ class Note {
 }
 
 var outputArray = [];
+var testTime = 0;
 
 function test() {
+
+testTime = performance.now();
 
   let testNote = new Note("C", 4, "", 0);
 
   console.log(testNote.accidental);
+  console.log(performance.now());
 
   WebMidi
   .enable()
@@ -32,7 +36,7 @@ function test() {
       });
     }
 
-    const mySynth = WebMidi.inputs[0];
+    const mySynth = WebMidi.inputs[4];
 
     let noteName;
     let noteAccidental;
@@ -59,6 +63,8 @@ function test() {
       noteArray.push(newNote);
       // console.log(noteArray[noteArray.length-1]);
       // console.log(noteArray.length);
+      console.log("Start ms: " + e.timestamp);
+      console.log("Start tick: " + e.timestamp/1000*256);
     });
 
     mySynth.channels[1].addListener("noteoff", e => {
@@ -116,11 +122,15 @@ function testTwo() {
 function arrayToTrack(){
 
   let track = new MidiWriter.Track();
+  track.setTempo(120, 0);
 
   for(var i = 0; i < outputArray.length; i++){
-    console.log(outputArray[i].velocity*100);
+    // console.log(outputArray[i].velocity*100);
+    console.log(testTime);
+    let startTime = outputArray[i].startTime/1000*256-testTime/1000*256;
+    console.log("Start tick: " + startTime);
     track.addEvent([
-      new MidiWriter.NoteEvent({pitch: [outputArray[i].name + outputArray[i].octave], duration: "T"+(outputArray[i].duration/1000*256).toFixed(0), startTick: outputArray[i].startTime/1000*256, velocity: outputArray[i].velocity*100})
+      new MidiWriter.NoteEvent({pitch: [outputArray[i].name + outputArray[i].octave], duration: "T"+(outputArray[i].duration/1000*256).toFixed(0), startTick: startTime, velocity: outputArray[i].velocity*100})
     ], function(event, index) {
       return {sequential: false};
     }

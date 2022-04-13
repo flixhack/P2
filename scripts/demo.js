@@ -24,7 +24,7 @@ async function playDemo(jsonURL) {
   console.log(jsonOutput.tracks);
 
   //Defining bus and channels
-  let midiOutput = WebMidi.outputs[0];
+  let midiOutput = WebMidi.outputs[3];
   const channelArray = [
     midiOutput.channels[1], 
     midiOutput.channels[2],
