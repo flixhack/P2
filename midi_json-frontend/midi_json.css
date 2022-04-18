@@ -1,0 +1,41 @@
+
+.main {
+    display: flex
+}
+#mellem1 {
+    width: 5%
+}
+
+#mellem2 {
+    width: 5%
+}
+#mellem3 {
+    width: 5%
+}
+textarea {
+    font-family: monospace;
+    height: 500px;
+    width: 100%;
+    display: inline-block;
+    position: relative;
+}
+
+#Results {
+    position: relative;
+    width: 40%;
+    margin: 10px auto;
+}
+
+#Description {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    height: 30px;
+    font-size: 16px;
+    margin: 30px auto;
+    font-family: sans-serif;
+}
+
+tone-play-toggle {
+    margin-top: 10px;
+}
