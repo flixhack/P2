@@ -9,17 +9,23 @@ class Note {
   }
 }
 
-var outputArray = [];
-var testTime = 0;
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms)); //stolen
+}
 
-function test() {
+//Calls functions to record midi for 10 seconds, then convert it to a .mid file
+async function generateMidi() {
+  var inputDevice = 0;
+  var outputArray = [];
+  var correctedStartTime = performance.now();
+  recordMidi(outputArray, inputDevice);
+  await sleep(10000);
+  arrayToTrack(outputArray, correctedStartTime);
+  disableWebMidiRecord();
+}
 
-testTime = performance.now();
-
-  let testNote = new Note("C", 4, "", 0);
-
-  console.log(testNote.accidental);
-  console.log(performance.now());
+//Opens for recording a given MIDI bus
+function recordMidi(outputArray, inputDevice) {
 
   WebMidi
   .enable()
@@ -27,16 +33,12 @@ testTime = performance.now();
 
   function onEnabled() {
 
+    //Error message if no MIDI devices are found
     if (WebMidi.inputs.length < 1) {
       document.body.innerHTML+= "No device detected.";
     } 
-    else {
-      WebMidi.inputs.forEach((device, index) => {
-        document.body.innerHTML+= `${index}: ${device.name} <br>`;
-      });
-    }
 
-    const mySynth = WebMidi.inputs[4];
+    const mySynth = WebMidi.inputs[inputDevice];
 
     let noteName;
     let noteAccidental;
@@ -55,24 +57,23 @@ testTime = performance.now();
       else {
           noteAccidental = "";
       }
+
+      //Saving the values from noteon to the noteArray to keep track of active notes
       noteOctave = e.note.octave;
       velocity = e.rawValue;
       startTime = e.timestamp;
       let newNote = new Note(e.note.name, e.note.octave, e.note.accidental, e.note.attack, e.timestamp);
 
       noteArray.push(newNote);
-      // console.log(noteArray[noteArray.length-1]);
-      // console.log(noteArray.length);
-      console.log("Start ms: " + e.timestamp);
-      console.log("Start tick: " + e.timestamp/1000*256);
     });
 
     mySynth.channels[1].addListener("noteoff", e => {
-      document.body.innerHTML+= `${e.timestamp} <br>`;
       duration = e.timestamp - startTime;
 
       var noteFound = false;
       var i = 0;
+
+      //Finds the note that matches the noteoff event, and removes it from the active noteArray
       while (i < noteArray.length && !noteFound) {
         if (noteArray[i].name == e.note.name) {
           if (noteArray[i].accidental == undefined) {
@@ -86,49 +87,21 @@ testTime = performance.now();
         i++;
       }
       console.log(outputArray[outputArray.length-1]);
-      console.log("input: " + noteArray.length + "\noutput: " + outputArray.length);
-      console.log("Blah: " + (outputArray[outputArray.length-1].duration/1000).toFixed(1));
     });
   }
 }
 
-function testTwo() {
-  let track = new MidiWriter.Track();
+//Converts the outputArray from recordMidi to a .mid file
+function arrayToTrack(outputArray, correctedStartTime){
 
-  track.addEvent([
-    new MidiWriter.NoteEvent({pitch: ['E4'], duration: '4'}),
-    new MidiWriter.NoteEvent({pitch: ['D4'], duration: '4', startTick: '1024'}),
-    new MidiWriter.NoteEvent({pitch: ['C4'], duration: '2', startTick: '1536'}),
-    new MidiWriter.NoteEvent({pitch: ['E4','D4'], duration: '4'}),
-    new MidiWriter.NoteEvent({pitch: ['C4'], duration: '2'}),
-    new MidiWriter.NoteEvent({pitch: ['C4', 'C4', 'C4', 'C4', 'D4', 'D4', 'D4', 'D4'], duration: '8'}),
-    new MidiWriter.NoteEvent({pitch: ['E4','D4'], duration: '4'}),
-    new MidiWriter.NoteEvent({pitch: ['C4'], duration: '2'})
-  ], function(event, index) {
-    return {sequential: true};
-  }
-  );
-
-  let write = new MidiWriter.Writer(track);
-  console.log(write.dataUri());
-  console.log("test"); 
-
-  
-
-
-
-}
-
-function arrayToTrack(){
+  console.log(outputArray);
 
   let track = new MidiWriter.Track();
   track.setTempo(120, 0);
 
+  //Generates each note of the .mid file from the outputArray. Also calculates the correct start time for each note
   for(var i = 0; i < outputArray.length; i++){
-    // console.log(outputArray[i].velocity*100);
-    console.log(testTime);
-    let startTime = outputArray[i].startTime/1000*256-testTime/1000*256;
-    console.log("Start tick: " + startTime);
+    let startTime = outputArray[i].startTime/1000*256-correctedStartTime/1000*256;
     track.addEvent([
       new MidiWriter.NoteEvent({pitch: [outputArray[i].name + outputArray[i].octave], duration: "T"+(outputArray[i].duration/1000*256).toFixed(0), startTick: startTime, velocity: outputArray[i].velocity*100})
     ], function(event, index) {
@@ -138,4 +111,9 @@ function arrayToTrack(){
   }
   let write = new MidiWriter.Writer(track);
   console.log(write.dataUri());
+}
+
+//Disables the MIDI recording
+function disableWebMidiRecord() {
+  WebMidi.disable();
 }
