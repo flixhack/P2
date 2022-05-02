@@ -9,19 +9,57 @@ class Note {
   }
 }
 
+class ScoreInfo {
+  constructor(bpm, timeSignatureTop, timeSignatureBottom, numberOfBarsToRecord, countInCount) {
+    this.bpm = bpm;
+    this.timeSignatureTop = timeSignatureTop;
+    this.timeSignatureBottom = timeSignatureBottom;
+    this.numberOfBarsToRecord = numberOfBarsToRecord;
+    this.countInCount = countInCount;
+  }
+}
+
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms)); //stolen
 }
 
-//Calls functions to record midi for 10 seconds, then convert it to a .mid file
+//Calls functions to record midi for the length of recordDuration, then convert it to a .mid file
 async function generateMidi() {
+  var Score = new ScoreInfo(getTextBox("bpm"), getTextBox("timeSignatureTop"), getTextBox("timeSignatureBottom"), getTextBox("numberOfBarsToRecord"), getTextBox("countInCount"));
+  playCountIn(Score, Score.timeSignatureBottom*Score.countInCount);
+  await sleep(caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureBottom*Score.countInCount);
+  console.log(Score);
   var inputDevice = 0;
   var outputArray = [];
   var correctedStartTime = performance.now();
   recordMidi(outputArray, inputDevice);
-  await sleep(10000);
+  await sleep(caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord);
   arrayToTrack(outputArray, correctedStartTime);
   disableWebMidiRecord();
+}
+
+//Gets the contents of an HTML input box
+function getTextBox(boxID) {
+  return document.getElementById(boxID).value;
+}
+
+//Plays the desired count in
+async function playCountIn(Score, countInNum) {
+  var countIn = generateCountIn(countInNum);
+
+  for (var i = 0; i < countInNum; i++) {
+    countIn[i].play();
+    await sleep(caclulateTimePerQuaterNote(Score.bpm));
+  }
+}
+
+//Generates the array to used by playCountIn
+function generateCountIn(countInNum) {
+  var countIn = [];
+  for (var i = 0; i < countInNum; i++) {
+    countIn[i] = new Audio("audio/countIn.mp3");
+  }
+  return countIn;
 }
 
 //Opens for recording a given MIDI bus
@@ -89,6 +127,10 @@ function recordMidi(outputArray, inputDevice) {
       console.log(outputArray[outputArray.length-1]);
     });
   }
+}
+
+function caclulateTimePerQuaterNote(bpm) {
+  return 60/bpm*1000;
 }
 
 //Converts the outputArray from recordMidi to a .mid file
