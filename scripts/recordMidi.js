@@ -153,6 +153,7 @@ function arrayToTrack(outputArray, correctedStartTime){
   }
   let write = new MidiWriter.Writer(track);
   console.log(write.dataUri());
+  console.log(write.buildData());
 }
 
 //Disables the MIDI recording
