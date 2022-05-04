@@ -147,7 +147,7 @@ function arrayToTrack(outputArray, correctedStartTime){
   for(var i = 0; i < outputArray.length; i++){
     let startTime = outputArray[i].startTime/1000*256-correctedStartTime/1000*256;
     track.addEvent([
-      new MidiWriter.NoteEvent({pitch: [outputArray[i].name + outputArray[i].octave], duration: "T"+(outputArray[i].duration/1000*256).toFixed(0), startTick: startTime, velocity: outputArray[i].velocity*100})
+      new MidiWriter.NoteEvent({pitch: [outputArray[i].name + outputArray[i].accidental + outputArray[i].octave], duration: "T"+(outputArray[i].duration/1000*256).toFixed(0), startTick: startTime, velocity: outputArray[i].velocity*100})
     ], function(event, index) {
       return {sequential: false};
     }
