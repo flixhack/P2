@@ -8,8 +8,8 @@
     <title>PlayJSON</title>
     <!-- import WebMIDI -->
     <script src="https://cdn.jsdelivr.net/npm/webmidi@next/dist/iife/webmidi.iife.js"></script>
-    <script src="scripts/demo.js"></script>
     <script src="scripts/recordMidi.js"></script>
+    <script src="scripts/demo.js"></script>
     <script src="scripts/midiWriter.js"></script>
 
   </head>
@@ -32,8 +32,9 @@
     <label for="numberOfBarsToRecord">Number of bars to record:</label>
     <input type="text" id="numberOfBarsToRecord" value = "4" name="numberOfBarsToRecord"><br><br>
     <label for="countInCount">Number of bars to count in:</label>
-    <input type="text" id="countInCount" value = "1" name="countInCount"><br><br>
-
+    <input type="text" id="countInCount" value = "0" name="countInCount"><br><br>
+    <label for="trackNumber">Track to play to:</label>
+    <input type="number" id="trackNumber" value = "1" name="trackNumber"><br><br> 
   </body>
 
 </html>
