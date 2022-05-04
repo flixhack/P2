@@ -138,8 +138,6 @@ function caclulateTimePerQuaterNote(bpm) {
 //Converts the outputArray from recordMidi to a .mid file
 function arrayToTrack(outputArray, correctedStartTime){
 
-  console.log(outputArray);
-
   let track = new MidiWriter.Track();
   track.setTempo(120, 0);
 
@@ -154,45 +152,41 @@ function arrayToTrack(outputArray, correctedStartTime){
     );
   }
   let write = new MidiWriter.Writer(track);
-  // Everything below here is temporary as so many things in life
-  // console.log(write.dataUri());
-  // console.log(write.buildData());
   globalArray = write.buildData();
-  console.log(write.buildData());
   var trackNumber = getTextBox("trackNumber");
   if (trackNumber < 1 || trackNumber > 16){
     console.error(trackNumber + " is not a valid track number\n");
   }
-  console.log("trackNumber: " + trackNumber);
   globalArray[2] = trackNumber;
   // Remove entry [0] to send less data
   globalArray.shift();
-  console.log(globalArray);
-  pairNoteEvents();
+  pairNoteEvents(1);
 }
 
 // Pair note events into pairs for a more neat array
-function pairNoteEvents() {
+function pairNoteEvents(trackNumber) {
   let noteOnArray = [];
   let finishedNoteArray = [];
   for (let i = 1; i < globalArray[0].events.length; i++) {
     if (globalArray[0].events[i].type === "note-on") {
-      console.log("note on!\n");
       noteOnArray.push(globalArray[0].events[i]);
     }
     else if (globalArray[0].events[i].type === "note-off") {
-      console.log("note off!\n");
       for (let j = 0; j < noteOnArray.length; j++) {
         if (noteOnArray[j].pitch === globalArray[0].events[i].pitch) {
           note = new Note;
           note.name = noteOnArray[j].pitch;
-          note.
-          finishedNoteArray.push;
+          note.velocity = noteOnArray[j].velocity;
+          note.startTime = noteOnArray[j].startTick;
+          note.duration = globalArray[0].events[i].duration;
+          finishedNoteArray.push(note);
           noteOnArray.splice(j, 1);
         }
       }
     }
   }
+  finishedNoteArray.unshift(trackNumber);
+  console.log(finishedNoteArray);
 }
 
 //Disables the MIDI recording
