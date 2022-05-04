@@ -34,11 +34,11 @@ function pairNoteOnAndOff(noteOnArray, noteOffArray) {
 //  Plays the JSON file
 async function playDemo(jsonURL) {
     
-  let jsonOutput = globalArray;
+  let jsonOutput = thingy;
 
 console.log("Blah\n");  
-console.log(jsonOutput[0].events[1]);
-console.log(jsonOutput[1].events.length);
+console.log(jsonOutput);
+// console.log(jsonOutput[1].events.length);
 
   //Defining bus and channels
   let midiOutput = WebMidi.outputs[0];
@@ -63,19 +63,18 @@ console.log(jsonOutput[1].events.length);
 
   //  Finding out which track has the most notes
   let maxTrackLength = 0;
-  for (let i = 1; i < jsonOutput[1].events.length - 1; i++) {
-    if (jsonOutput[1].events[i].length > maxTrackLength) {
-      maxTrackLength = jsonOutput[1].events[i].length;
+  for (let i = 1; i < jsonOutput.length - 1; i++) {
+    if (jsonOutput.length > maxTrackLength) {
+      maxTrackLength = jsonOutput.length;
     }
   }
 
   //  Playing the notes
   for (let j = 1; j < 2; j++) {
-    for (let i = 0; i < jsonOutput[1].events.length - 1; i++) {
-      if (j < jsonOutput[1].events[i].length) {
-        let duration = jsonOutput[1].events[i].duration;
-        channelArray[i].playNote(jsonoutput[1].events[i].pitch, jsonoutput[1].events[i].time, jsonoutput[1].events[i][j].duration);
-        channelArray[i].playNote(jsonOutput.tracks[i].notes[j].name, {duration: jsonOutput.tracks[i].notes[j].duration*1000, attack: jsonOutput.tracks[i].notes[j].velocity, time: "+"+jsonOutput.tracks[i].notes[j].time*1000});
+    for (let i = 1; i < jsonOutput.length; i++) {
+      if (j < jsonOutput.length) {
+        console.log(jsonOutput[i].duration);
+        channelArray[i].playNote(jsonOutput[i].name, {duration: jsonOutput[i].duration, time: "+"+jsonOutput[i].startTime, attack: jsonOutput[i].velocity/100});
       }
     }
   }
@@ -83,4 +82,8 @@ console.log(jsonOutput[1].events.length);
 
 function disableWebMidi() {
   WebMidi.disable();
+}
+
+function penisLength() {
+  let penisL
 }
