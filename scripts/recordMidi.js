@@ -19,8 +19,7 @@ class ScoreInfo {
   }
 }
 
-var globalArray;
-var thingy;
+var testBridge;
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms)); //stolen
@@ -108,6 +107,7 @@ function recordMidi(outputArray, inputDevice) {
       noteArray.push(newNote);
     });
 
+    let recordBus = getTextBox("recordBus");
     mySynth.channels[1].addListener("noteoff", e => {
       duration = e.timestamp - startTime;
 
@@ -140,6 +140,7 @@ function caclulateTimePerQuaterNote(bpm) {
 function arrayToTrack(outputArray, correctedStartTime){
 
   let track = new MidiWriter.Track();
+  let midiWriterArray;
   track.setTempo(120, 0);
 
   //Generates each note of the .mid file from the outputArray. Also calculates the correct start time for each note
@@ -153,34 +154,34 @@ function arrayToTrack(outputArray, correctedStartTime){
     );
   }
   let write = new MidiWriter.Writer(track);
-  globalArray = write.buildData();
+  midiWriterArray = write.buildData();
   var trackNumber = getTextBox("trackNumber");
   if (trackNumber < 1 || trackNumber > 16){
     console.error(trackNumber + " is not a valid track number\n");
   }
-  globalArray[2] = trackNumber;
+  midiWriterArray[2] = trackNumber;
   // Remove entry [0] to send less data
-  globalArray.shift();
-  pairNoteEvents(1);
+  midiWriterArray.shift();
+  pairNoteEvents(midiWriterArray, getTextBox("trackNumber"));
 }
 
 // Pair note events into pairs for a more neat array
-function pairNoteEvents(trackNumber) {
+function pairNoteEvents(midiWriterArray, trackNumber) {
   let noteOnArray = [];
   let finishedNoteArray = [];
-  for (let i = 1; i < globalArray[0].events.length; i++) {
-    if (globalArray[0].events[i].type === "note-on") {
-      noteOnArray.push(globalArray[0].events[i]);
+  for (let i = 1; i < midiWriterArray[0].events.length; i++) {
+    if (midiWriterArray[0].events[i].type === "note-on") {
+      noteOnArray.push(midiWriterArray[0].events[i]);
     }
-    else if (globalArray[0].events[i].type === "note-off") {
+    else if (midiWriterArray[0].events[i].type === "note-off") {
       for (let j = 0; j < noteOnArray.length; j++) {
-        if (noteOnArray[j].pitch === globalArray[0].events[i].pitch) {
+        if (noteOnArray[j].pitch === midiWriterArray[0].events[i].pitch) {
           note = new Note;
           note.name = noteOnArray[j].pitch;
           note.velocity = noteOnArray[j].velocity;
           note.startTime = noteOnArray[j].startTick;
           note.startTime = note.startTime*1000/256;
-          note.duration = globalArray[0].events[i].duration;
+          note.duration = midiWriterArray[0].events[i].duration;
           // remove T from duration to make it readable by WebMidi
           note.duration = note.duration.slice(1);
           note.duration = parseInt(note.duration);
@@ -192,7 +193,7 @@ function pairNoteEvents(trackNumber) {
     }
   }
   finishedNoteArray.unshift(trackNumber);
-  thingy = finishedNoteArray;
+  testBridge = finishedNoteArray;
   console.log(finishedNoteArray);
 }
 

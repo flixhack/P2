@@ -19,29 +19,27 @@ async function getData(url) {
 }
 
 function sortNoteOnAndOff() {
-  for (let i = 1; i < (globalArray[0].events - 2).length; i++) {
+  for (let i = 1; i < (midiWriterArray[0].events - 2).length; i++) {
     
   }
 }
 
 //Pairing note-on and note-off events
-function pairNoteOnAndOff(noteOnArray, noteOffArray) {
-  for (let i = 1; i < (globalArray[0].events - 2).length; i++) {
-    
+function pairNoteOnAndOff() {
+  for (let i = 1; i < (midiWriterArray[0].events - 2).length; i++) {
   }
 }
 
 //  Plays the JSON file
 async function playDemo(jsonURL) {
     
-  let jsonOutput = thingy;
+  let playArray = [testBridge];
 
-console.log("Blah\n");  
-console.log(jsonOutput);
-// console.log(jsonOutput[1].events.length);
+  console.log(playArray);
 
   //Defining bus and channels
-  let midiOutput = WebMidi.outputs[0];
+  let playBackBus = getTextBox("playBus");
+  let midiOutput = WebMidi.outputs[1];
 
   const channelArray = [
     midiOutput.channels[1],
@@ -63,18 +61,25 @@ console.log(jsonOutput);
 
   //  Finding out which track has the most notes
   let maxTrackLength = 0;
-  for (let i = 1; i < jsonOutput.length - 1; i++) {
-    if (jsonOutput.length > maxTrackLength) {
-      maxTrackLength = jsonOutput.length;
+  for (let i = 0; i < playArray.length; i++) {
+    if (playArray[i].length > maxTrackLength) {
+      maxTrackLength = playArray[i].length;
     }
   }
 
+  console.log(playArray[0]);
+  console.log(playArray[0][1]);
+
   //  Playing the notes
-  for (let j = 1; j < 2; j++) {
-    for (let i = 1; i < jsonOutput.length; i++) {
-      if (j < jsonOutput.length) {
-        console.log(jsonOutput[i].duration);
-        channelArray[i].playNote(jsonOutput[i].name, {duration: jsonOutput[i].duration, time: "+"+jsonOutput[i].startTime, attack: jsonOutput[i].velocity/100});
+  for (let j = 0; j <= 16; j++) {
+    if (playArray[j] !== undefined) {
+      console.log(j);
+      for (let i = 1; i < playArray[j].length; i++) {
+        if (j < playArray[j].length) {
+          console.log(playArray[j][i].velocity/100);
+          console.log(playArray[j][i].duration);
+          channelArray[playArray[j][0]-1].playNote(playArray[j][i].name, {duration: playArray[j][i].duration, time: "+"+playArray[j][i].startTime, attack: playArray[j][i].velocity/100});
+        }
       }
     }
   }
@@ -82,8 +87,4 @@ console.log(jsonOutput);
 
 function disableWebMidi() {
   WebMidi.disable();
-}
-
-function penisLength() {
-  let penisL
 }
