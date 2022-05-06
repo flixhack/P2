@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/webmidi@next/dist/iife/webmidi.iife.js"></script>
     <script src="scripts/recordMidi.js"></script>
     <script src="scripts/player.js"></script>
-    <script src="scripts/midiWriter.js"></script>
+    <!-- <script src="scripts/midiWriter.js"></script> -->
 
   </head>
 
@@ -33,12 +33,12 @@
     <input type="text" id="numberOfBarsToRecord" value = "4" name="numberOfBarsToRecord"><br><br>
     <label for="countInCount">Number of bars to count in:</label>
     <input type="text" id="countInCount" value = "0" name="countInCount"><br><br>
-    <label for="trackNumber">Track to play to:</label>
-    <input type="number" id="trackNumber" value = "1" name="trackNumber"><br><br> 
     <label for="recordBus">Bus to record from:</label>
     <input type="number" id="recordBus" value = "1" name="recordBus"><br><br> 
     <label for="playBus">Bus to play to:</label>
     <input type="number" id="playBus" value = "1" name="playBus"><br><br> 
+    <label for="trackNumber">Track to record to/from:</label>
+    <input type="number" id="trackNumber" value = "1" name="trackNumber"><br><br> 
   </body>
 
 </html>

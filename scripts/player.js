@@ -18,28 +18,16 @@ async function getData(url) {
   return response.json();
 }
 
-function sortNoteOnAndOff() {
-  for (let i = 1; i < (midiWriterArray[0].events - 2).length; i++) {
-    
-  }
-}
-
-//Pairing note-on and note-off events
-function pairNoteOnAndOff() {
-  for (let i = 1; i < (midiWriterArray[0].events - 2).length; i++) {
-  }
-}
-
 //  Plays the JSON file
 async function playDemo(jsonURL) {
     
-  let playArray = [testBridge];
+  let outputBus = getTextBox("playBus") - 1;
+  let playArray = testBridge;
 
   console.log(playArray);
 
   //Defining bus and channels
-  let playBackBus = getTextBox("playBus");
-  let midiOutput = WebMidi.outputs[1];
+  let midiOutput = WebMidi.outputs[outputBus];
 
   const channelArray = [
     midiOutput.channels[1],
@@ -67,18 +55,12 @@ async function playDemo(jsonURL) {
     }
   }
 
-  console.log(playArray[0]);
-  console.log(playArray[0][1]);
-
   //  Playing the notes
   for (let j = 0; j <= 16; j++) {
     if (playArray[j] !== undefined) {
-      console.log(j);
       for (let i = 1; i < playArray[j].length; i++) {
         if (j < playArray[j].length) {
-          console.log(playArray[j][i].velocity/100);
-          console.log(playArray[j][i].duration);
-          channelArray[playArray[j][0]-1].playNote(playArray[j][i].name, {duration: playArray[j][i].duration, time: "+"+playArray[j][i].startTime, attack: playArray[j][i].velocity/100});
+          channelArray[playArray[j][0]-1].playNote(playArray[j][i].name, {duration: playArray[j][i].duration, time: "+"+playArray[j][i].startTime, attack: playArray[j][i].velocity});
         }
       }
     }
