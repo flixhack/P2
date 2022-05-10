@@ -38,7 +38,7 @@ async function generateMidi() {
   var correctedStartTime = performance.now();
   recordMidi(outputArray, inputDevice, caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord, correctedStartTime);
   await sleep(caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord);
-  disableWebMidiRecord();
+  // disableWebMidiRecord();
 }
 
 //Gets the contents of an HTML input box
@@ -60,13 +60,19 @@ async function playCountIn(Score, countInNum) {
 async function generateCountIn(countInNum) {
   var countIn = [];
   for (var i = 0; i < countInNum; i++) {
-    countIn[i] = new Audio("audio/countIn.mp3");
+    countIn[i] = new Audio("/countIn.mp3");
   }
   return countIn;
 }
 
+var testyBoi = 0;
+
 //Opens for recording a given MIDI bus
 async function recordMidi(outputArray, inputDevice, amountOfTimeToRecord, correctedStartTime) {
+  testyBoi = 0;
+
+  let noteAccidental;
+  var noteArray = [];
 
   WebMidi
   .enable()
@@ -81,12 +87,14 @@ async function recordMidi(outputArray, inputDevice, amountOfTimeToRecord, correc
 
     const mySynth = WebMidi.inputs[inputDevice];
 
-    let noteAccidental;
-    var noteArray = [];
-
     mySynth.channels[getTextBox("trackNumber")].addListener("noteon", e => {
-      // noteName = e.note.name + e.note.accidental + e.note.octave;
       //The accidental will return "undefined" if there is no accidental, so we need to check for that to avoid an invalid note
+
+      if (testyBoi == 1) {
+        console.log("Testies");
+        mySynth.channels[getTextBox("trackNumber")].removeListener("noteon");
+      }
+
       if (e.note.accidental == "#") {
           noteAccidental = e.note.accidental;
       }
@@ -101,7 +109,11 @@ async function recordMidi(outputArray, inputDevice, amountOfTimeToRecord, correc
 
     let recordBus = getTextBox("recordBus");
     mySynth.channels[getTextBox("trackNumber")].addListener("noteoff", e => {
-      // duration = e.timestamp - startTime;
+
+      if (testyBoi == 1) {
+        console.log("Testies");
+        mySynth.channels[getTextBox("trackNumber")].removeListener("noteoff");
+      }
 
       var noteFound = false;
       var i = 0;
@@ -114,6 +126,7 @@ async function recordMidi(outputArray, inputDevice, amountOfTimeToRecord, correc
         else {
           noteAccidental = "";
         }
+        
         if (noteArray[i].name == e.note.name + noteAccidental + e.note.octave) {
           if (noteArray[i].accidental == undefined) {
             noteArray[i].accidental = "";
@@ -128,7 +141,15 @@ async function recordMidi(outputArray, inputDevice, amountOfTimeToRecord, correc
       console.log(outputArray[outputArray.length-1]);
     });
   }
+
   await sleep(amountOfTimeToRecord);
+  for (let i = 0; i < noteArray.length; i++) {
+    console.log(noteArray[i]);
+    noteArray[i].duration = performance.now() - noteArray[i].startTime - correctedStartTime;
+    outputArray.push(noteArray[i]);
+  }
+
+  testyBoi = 1;
   outputArray.unshift(getTextBox("trackNumber"));
   console.log(outputArray);
   testBridge = outputArray;
@@ -137,6 +158,12 @@ async function recordMidi(outputArray, inputDevice, amountOfTimeToRecord, correc
 
 function caclulateTimePerQuaterNote(bpm) {
   return 60/bpm*1000;
+}
+
+var something = 0;
+
+async function testStuff() {
+  something = 1;
 }
 
 //Disables the MIDI recording

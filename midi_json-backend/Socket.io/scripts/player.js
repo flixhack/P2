@@ -18,14 +18,8 @@ socket.on("sendServerMidi", function(data) {
   test = data;
 });
 
-//  Loads the JSON file
-async function getData(url) {
-  const response = await fetch(url);
-  return response.json();
-}
-
 //  Plays the JSON file
-async function playDemo(jsonURL) {
+async function playDemo() {
     
   let outputBus = getTextBox("playBus") - 1;
   let playArray = test;
@@ -71,6 +65,13 @@ async function playDemo(jsonURL) {
       }
     }
   }
+  await sleep(4000);
+  if (something === 1) {
+    console.log("Hi");
+    generateMidi();
+    something = 0;
+  }
+  playDemo();
 }
 
 function disableWebMidi() {
