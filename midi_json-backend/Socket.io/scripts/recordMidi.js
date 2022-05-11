@@ -25,7 +25,7 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms)); //stolen
 }
 
-//Calls functions to record midi for the length of recordDuration, then convert it to a .mid file
+//Calls functions to record midi for the length of recordDuration
 async function generateMidi() {
   var Score = new ScoreInfo(getTextBox("bpm"), getTextBox("timeSignatureTop"), getTextBox("timeSignatureBottom"), getTextBox("numberOfBarsToRecord"), getTextBox("countInCount"));
   playCountIn(Score, Score.timeSignatureBottom*Score.countInCount);
