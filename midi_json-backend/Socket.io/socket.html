@@ -1,16 +1,104 @@
-
-<!--Don't use in our project, only check-->
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>Socket.IO</title>
-  </head>
-  <body>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="handleData.js"></script>
-    <form>
-      <ul id="messages"></ul>
-      <select id="select">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Javascript Example</title>
+        <script src="/socket.io/socket.io.js"></script>
+        <link rel="stylesheet" href="layout.css" type="text/css"/>
+             
+    </head>
+    <body>
+        <h2 id="intro">WELCOME TO PLAY MUSIC ONLINE</h2>
+        <form>
+            <div id="register">
+                <input type="text" id="textName" placeholder="Your name"/>
+                <input type="button" id="btnRegister" value="Register"/>
+                <input type="button" id="btnLogin" value="Login"/>
+
+                <input type="button" id="btnLogout" value="Logout" disabled>
+            </div>
+        </form><br>
+    
+        <div id="sayHi">
+            Hello <span id="currentUser" style="color: blue"></span>
+        </div><br>
+     
+        <div> 
+            <div id="creatRoom">CREATE NEW ROOM</dive>
+            <input type="text" id="nameRoom" disabled="disabled"/>
+            <input type="button" id="btnCreateRoom" value="Create" disabled/>
+        </div><br>
+        <div style="text-align: center; color:rgb(0, 183, 255); font-weight: bold">OR JOIN AN EXISTING ROOM</div><br>
+       
+        <form>
+        <div id="chooseRoom">
+            <select id="listRoom" multiple onchange="validateSelectBox(this)"></select>
+        </div>     
+        </form>
+
+        <form>
+            <div id="sayRoom">    
+            <div id="sayR">
+                You're in room<span id="currentRoom" style="color: blue"></span>
+            </div>
+            
+              <div><input type="button" id="logoutRoom" value="Logout Room" disabled> </div>
+            </div> 
+        </form><br>
+
+        <form>
+        <div id="main">   
+            <div id="left">
+                <div id="showOnline">
+                    <div id="boxTitle">Users online<span id="numberOnline"></span></div>
+                    <textarea id="boxContent" readonly></textarea>
+                </div>
+                <div id="chatPlayMusic">
+                    <input type="button" id="btnChat" value="Chat with all Users" disabled>
+                </div>
+            </div>
+            <div class="space2"></div>
+            <div id="right">
+                <div id="showRoom">
+                    <div id="showRoomChoose">Users in room<span id="roomNow"></span></div>
+                    <textarea id="contentRoom" readonly></textarea>
+                </div>
+                <div id="chatPlayMusic1">
+                    <input type="button" id="btnChatMusic" value="Chat and Play in Room" disabled>
+                </div>
+            </div>
+        </div><br>  
+        </form>
+
+        <div id="chatStatus">
+            Chat <span id="currentStatus" style="color: blue"></span>
+        </div>
+
+        <form>
+        <div id="box3">
+           <textarea id="listMessage" readonly></textarea>
+        </div>
+        </form>
+
+        <div id="boxMessage">
+            <input id="message" autocomplete="off" disabled/><button id="btnSend" disabled>Send</button>
+        </div>
+
+        <div id="boxMessage1">
+            <input id="message1" autocomplete="off" disabled/><button id="btnSend1" disabled>Send</button>
+        </div>
+       
+        <hr>
+        <p> Our website will be connected continue from here on the same html file. 
+            Json files below are used to simulate how code works. 
+            This part will be deleted in our project</p>
+        <!--This form use to check
+            don't use in project, deltete-->
+        <form>
+            <ul id="messages"></ul>
+            <ul id="messages"></ul>
+         <select id="select" multiple onchange="SelectBox(this)">
           <option value="1">Json 1</option>
           <option value="2">Json 2</option>
           <option value="3">Json 3</option>
@@ -20,8 +108,11 @@
           <option value="7">Json 7</option>
           <option value="8">Json 8</option>
       </select>
-      <input type="submit" name="submit" onclick='selectJson()'>
       </form>
-  </body>
-</html>
+    <!--Above form use to check
+            don't use in project, deltete-->  
+    
+    </body>
+    <script src="handleData.js"></script>
 
+</html>

@@ -1,0 +1,35 @@
+
+body{background-color: rgb(230, 230, 220);}
+#main{ display: flex; text-align: center; justify-content: center;}
+#intro{text-align: center; margin-top: 50px; color: rgb(54, 120, 122);}
+#register{ text-align: center; margin-top: 20px; color: darkolivegreen;}
+#sayHi{text-align: center; color:rgb(202, 16, 62)}
+#creatRoom{text-align: center; justify-content: center; width:100%; 
+            font-weight: bold;color: rgb(16, 95, 9);}
+#chooseRoom{text-align: center; justify-content: center; width:100%; 
+            font-weight: bold;color: rgb(16, 95, 9);}
+#sayRoom{text-align: center; justify-content: center; text-align: center; color:rgb(202, 16, 62)}
+#boxTitle{text-align: center; justify-content: center; width:98.5%; 
+            border:solid 1px black;font-weight: bold;color: rgb(52, 120, 247);}
+#boxContent{text-align: center; justify-content: center; text-align: center;
+            height: 150px; width:96%; border:solid 1px black; background-color: rgb(230, 230, 220)}
+
+.space2{width:1%}
+#btnChat{width: 100%; font-weight: bold; color: rgb(52, 120, 247);}
+#showRoomChoose{text-align: center; justify-content: center; width:98.5%; 
+            border:solid 1px black;font-weight: bold;color: rgb(52, 120, 247);}
+#contentRoom{text-align: center; justify-content: center; text-align: center;
+            height: 150px; width:96%; border:solid 1px black; background-color: rgb(230, 230, 220)}
+#btnChatMusic{width: 100%; font-weight: bold; color: rgb(52, 120, 247);}
+#chatStatus{text-align: center; color:rgb(202, 16, 62)}
+
+#box3{display: flex; text-align: center; justify-content: center}
+#boxMessage1{display: flex; justify-content: center; height: 25px;}
+#message1{width: 15.9%}
+
+#boxMessage{display: flex; justify-content: center; height: 25px;}
+#listMessage{width:18.5%; height: 100px; text-align: left; background-color: aliceblue;}
+#message{width: 15.9%}
+
+
+  
