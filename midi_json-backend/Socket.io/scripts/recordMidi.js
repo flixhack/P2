@@ -19,10 +19,8 @@ class ScoreInfo {
   }
 }
 
-var testBridge;
-
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms)); //stolen
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 //Calls functions to record midi for the length of recordDuration, then convert it to a .mid file
@@ -65,11 +63,9 @@ async function generateCountIn(countInNum) {
   return countIn;
 }
 
-var testyBoi = 0;
-
 //Opens for recording a given MIDI bus
 async function recordMidi(outputArray, inputDevice, amountOfTimeToRecord, correctedStartTime) {
-  testyBoi = 0;
+  var testyBoi = 0;
 
   let noteAccidental;
   var noteArray = [];
@@ -91,7 +87,6 @@ async function recordMidi(outputArray, inputDevice, amountOfTimeToRecord, correc
       //The accidental will return "undefined" if there is no accidental, so we need to check for that to avoid an invalid note
 
       if (testyBoi == 1) {
-        console.log("Testies");
         mySynth.channels[getTextBox("trackNumber")].removeListener("noteon");
       }
 
@@ -103,7 +98,7 @@ async function recordMidi(outputArray, inputDevice, amountOfTimeToRecord, correc
       }
 
       //Saving the values from noteon to the noteArray to keep track of active notes
-      let newNote = new Note(e.note.name + noteAccidental + e.note.octave, e.note.attack, e.timestamp - correctedStartTime);
+      let newNote = new Note(e.note.name + noteAccidental + e.note.octave, e.note.attack, e.timestamp - correctedStartTime, 0);
       noteArray.push(newNote);
     });
 
@@ -111,7 +106,6 @@ async function recordMidi(outputArray, inputDevice, amountOfTimeToRecord, correc
     mySynth.channels[getTextBox("trackNumber")].addListener("noteoff", e => {
 
       if (testyBoi == 1) {
-        console.log("Testies");
         mySynth.channels[getTextBox("trackNumber")].removeListener("noteoff");
       }
 
@@ -152,18 +146,18 @@ async function recordMidi(outputArray, inputDevice, amountOfTimeToRecord, correc
   testyBoi = 1;
   outputArray.unshift(getTextBox("trackNumber"));
   console.log(outputArray);
-  testBridge = outputArray;
   socket.emit("sendClientMidi", outputArray);
+  outputArray = [];
 }
 
 function caclulateTimePerQuaterNote(bpm) {
   return 60/bpm*1000;
 }
 
-var something = 0;
+var queueRecordVar = 0;
 
-async function testStuff() {
-  something = 1;
+function queueRecord() {
+  queueRecordVar = 1;
 }
 
 //Disables the MIDI recording

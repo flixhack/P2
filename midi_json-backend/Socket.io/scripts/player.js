@@ -12,6 +12,13 @@ function logMidiIO() {
   WebMidi.outputs.forEach(output => console.log("Output: " + output.manufacturer, output.name));
 }
 
+var toggleLoop = 0;
+
+function togglePlay() {
+  if (toggleLoop === 0) {toggleLoop = 1; playDemo();}
+  else if (toggleLoop === 1) {toggleLoop = 0;}
+}
+
 var test;
 
 socket.on("sendServerMidi", function(data) {
@@ -24,6 +31,7 @@ async function playDemo() {
   let outputBus = getTextBox("playBus") - 1;
   let playArray = test;
 
+  
   console.log(playArray);
 
   //Defining bus and channels
@@ -66,12 +74,13 @@ async function playDemo() {
     }
   }
   await sleep(4000);
-  if (something === 1) {
-    console.log("Hi");
+  if (queueRecordVar === 1) {
     generateMidi();
-    something = 0;
+    queueRecordVar = 0;
   }
-  playDemo();
+  if (toggleLoop === 1) {
+    playDemo();
+  }
 }
 
 function disableWebMidi() {

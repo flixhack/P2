@@ -5,14 +5,28 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 var port = 3271
 
-var arrayJason = []
+var trackArray = []
 io.on("connection", function(socket) {     
 	console.log('a user connected,'+' id:' + socket.id)  // check connect
 	socket.on('sendClientMidi', function(data){  // listen client
-		arrayJason.push(data)               // save json to array (synchronous)
-		console.log(arrayJason)  // check json on server
-		setTimeout(() => {io.sockets.emit('sendServerMidi', arrayJason)}, 8000)
-		//setTimeout(() => {arrayJason=[]}, 12000)  // delete arrays elementes
+		console.log(trackArray.length);
+		for (let i = 0; i < trackArray.length; i++) {
+			console.log(data[0]);
+			if (data[0] === trackArray[i][0]) {
+				trackArray.splice(i, 1);
+			}
+			if (i === trackArray.length-1) {
+				console.log("Before: " + data);
+				data = [];
+				console.log("After: " + data);
+			}
+		}
+		
+		trackArray.push(data);
+
+		// console.log(trackArray)
+		setTimeout(() => {io.sockets.emit('sendServerMidi', trackArray)}, 2000)
+		//setTimeout(() => {trackArray=[]}, 12000)  // delete arrays elementes
 	});
 });
  
