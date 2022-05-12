@@ -43,22 +43,11 @@ function getTextBox(boxID) {
 
 //Plays the desired count in
 async function playCountIn(Score, countInNum) {
-  var countIn = generateCountIn(countInNum);
 
   for (var i = 0; i < countInNum; i++) {
-    countIn[i].play();
-    console.log("BEEP");
+    console.log(i + 1);
     await sleep(caclulateTimePerQuaterNote(Score.bpm));
   }
-}
-
-//Generates the array to used by playCountIn
-async function generateCountIn(countInNum) {
-  var countIn = [];
-  for (var i = 0; i < countInNum; i++) {
-    countIn[i] = new Audio("/countIn.mp3");
-  }
-  return countIn;
 }
 
 //Opens for recording a given MIDI bus
