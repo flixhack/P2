@@ -29,7 +29,6 @@ async function generateMidi() {
   playCountIn(Score, Score.timeSignatureBottom*Score.countInCount);
   //Wait while the count in is happening
   await sleep(caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureBottom*Score.countInCount);
-  console.log(Score);
   var inputDevice = getTextBox("recordBus") - 1;
   //Webmidi starts playing based on how long ago the page was loaded. We log the time the page has been opened to adjust for this
   var correctedStartTime = performance.now();
@@ -43,7 +42,6 @@ function getTextBox(boxID) {
 
 //Plays the desired count in
 async function playCountIn(Score, countInNum) {
-
   for (var i = 0; i < countInNum; i++) {
     console.log(i + 1);
     await sleep(caclulateTimePerQuaterNote(Score.bpm));

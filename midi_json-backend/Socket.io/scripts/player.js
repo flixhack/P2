@@ -29,7 +29,8 @@ socket.on("sendServerMidi", function(data) {
 
 //  Plays the JSON file
 async function playDemo() {
-    
+
+  var Score = new ScoreInfo(getTextBox("bpm"), getTextBox("timeSignatureTop"), getTextBox("timeSignatureBottom"), getTextBox("numberOfBarsToRecord"), getTextBox("countInCount"));  
   let outputBus = getTextBox("playBus") - 1;
   let playArray = test;
 
@@ -72,7 +73,7 @@ async function playDemo() {
       }
     }
   }
-  await sleep(4000);
+  await sleep(caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord);
   if (queueRecordVar === 1) {
     generateMidi();
     queueRecordVar = 0;

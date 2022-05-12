@@ -23,7 +23,7 @@
     <button onclick="togglePlay()">Play</button>
     <button onclick="disableWebMidi()">Disable WebMIDI</button>
     <button onclick="generateMidi()">Generate MIDI</button>
-    <button onclick="queueRecord()">Record next bar </button>
+    <button onclick="queueRecord()">Record next loop</button><br><br>
     <label for="bpm">BPM:</label>
     <input type="text" id="bpm" value = "120" name="bpm"><br><br>
     <label for="timeSignatureTop">Time Signature Top:</label>
@@ -33,9 +33,9 @@
     <label for="numberOfBarsToRecord">Number of bars to record:</label>
     <input type="text" id="numberOfBarsToRecord" value = "4" name="numberOfBarsToRecord"><br><br>
     <label for="countInCount">Number of bars to count in:</label>
-    <input type="text" id="countInCount" value = "0" name="countInCount"><br><br>
+    <input type="text" id="countInCount" value = "1" name="countInCount"><br><br>
     <label for="recordBus">Bus to record from:</label>
-    <input type="number" id="recordBus" value = "1" name="recordBus"><br><br> 
+    <input type="number" id="recordBus" value = "2" name="recordBus"><br><br> 
     <label for="playBus">Bus to play to:</label>
     <input type="number" id="playBus" value = "1" name="playBus"><br><br> 
     <label for="trackNumber">Track to record to/from:</label>
