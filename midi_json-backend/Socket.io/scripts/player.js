@@ -83,6 +83,19 @@ async function playDemo() {
   }
 }
 
+metronome();
+
+function metronome() {
+  WebMidi.enable()
+  let midiOutput = WebMidi.outputs[1];
+  const channelArray = [
+    midiOutput.channels[16]];
+  
+  channelArray[0].playNote(C3, {duration: 100, time: "+"+0});
+
+
+}
+
 function queueRecord() {
   queueRecordVar = 1;
 }
