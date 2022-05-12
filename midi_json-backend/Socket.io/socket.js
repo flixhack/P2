@@ -12,14 +12,14 @@ io.on("connection", function(socket) {
 		console.log(trackArray.length);
 		for (let i = 0; i < trackArray.length; i++) {
 			console.log(data[0]);
-			if (data[0] === trackArray[i][0]) {
-				trackArray.splice(i, 1);
-			}
-			if (i === trackArray.length-1) {
-				console.log("Before: " + data);
-				data = [];
-				console.log("After: " + data);
-			}
+			// if (data[0] === trackArray[i][0]) {
+			// 	trackArray.splice(i, 1);
+			// }
+			// if (i === trackArray.length-1) {
+			// 	console.log("Before: " + data);
+			// 	data = [];
+			// 	console.log("After: " + data);
+			// }
 		}
 		
 		trackArray.push(data);

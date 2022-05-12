@@ -31,10 +31,9 @@ async function generateMidi() {
   await sleep(caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureBottom*Score.countInCount);
   console.log(Score);
   var inputDevice = getTextBox("recordBus") - 1;
-  var outputArray = [];
   //Webmidi starts playing based on how long ago the page was loaded. We log the time the page has been opened to adjust for this
   var correctedStartTime = performance.now();
-  recordMidi(outputArray, inputDevice, caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord, correctedStartTime);
+  recordMidi(inputDevice, caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord, correctedStartTime);
   await sleep(caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord);
   // disableWebMidiRecord();
 }
@@ -64,9 +63,9 @@ async function generateCountIn(countInNum) {
 }
 
 //Opens for recording a given MIDI bus
-async function recordMidi(outputArray, inputDevice, amountOfTimeToRecord, correctedStartTime) {
-  var testyBoi = 0;
-
+async function recordMidi(inputDevice, amountOfTimeToRecord, correctedStartTime) {
+  var enableListeners = 0;
+  var outputArray = [];
   let noteAccidental;
   var noteArray = [];
 
@@ -86,7 +85,7 @@ async function recordMidi(outputArray, inputDevice, amountOfTimeToRecord, correc
     mySynth.channels[getTextBox("trackNumber")].addListener("noteon", e => {
       //The accidental will return "undefined" if there is no accidental, so we need to check for that to avoid an invalid note
 
-      if (testyBoi == 1) {
+      if (enableListeners == 1) {
         mySynth.channels[getTextBox("trackNumber")].removeListener("noteon");
       }
 
@@ -105,7 +104,7 @@ async function recordMidi(outputArray, inputDevice, amountOfTimeToRecord, correc
     let recordBus = getTextBox("recordBus");
     mySynth.channels[getTextBox("trackNumber")].addListener("noteoff", e => {
 
-      if (testyBoi == 1) {
+      if (enableListeners == 1) {
         mySynth.channels[getTextBox("trackNumber")].removeListener("noteoff");
       }
 
@@ -114,6 +113,7 @@ async function recordMidi(outputArray, inputDevice, amountOfTimeToRecord, correc
 
       //Finds the note that matches the noteoff event, and removes it from the active noteArray
       while (i < noteArray.length && !noteFound) {
+        console.log("Hey! Listen!");
         if (e.note.accidental == "#") {
           noteAccidental = e.note.accidental;
         }
@@ -143,7 +143,7 @@ async function recordMidi(outputArray, inputDevice, amountOfTimeToRecord, correc
     outputArray.push(noteArray[i]);
   }
 
-  testyBoi = 1;
+  enableListeners = 1;
   outputArray.unshift(getTextBox("trackNumber"));
   console.log(outputArray);
   socket.emit("sendClientMidi", outputArray);
