@@ -1,0 +1,44 @@
+Install docker
+================
+
+Til udviklings pc hent Docker Desktop: https://docs.docker.com/get-docker/
+
+Til server kør:
+
+    curl -fsSL https://get.docker.com -o get-docker.sh
+    sudo sh get-docker.sh
+
+Install docker-compose (følger med Docker Desktop, men ikke server):
+
+    sudo curl -SL https://github.com/docker/compose/releases/download/v1.29.2/docker-compose-linux-x86_64 \
+      -o /usr/bin/docker-compose
+    sudo chmod +x /usr/bin/docker-compose
+
+
+Kør klient og server
+====================
+
+Server er bygget med node i Dockerfile.server
+Klient er lagt ind i en nginx webserver og kan bygges med Dockerfile.client
+
+Klient kører på port 80, og skal bruge en BASE_URL for at kunne finde serveren.
+
+`docker-compose.yml` kan bruges til at configurere og starte begge på samme tid.
+
+Min server er på ip 192.168.1.190 , så jeg sætter SERVER_BASE_URL i docker-compose
+til http://192.168.1.190:3000 (erstat 192.168.1.190 med jeres server)
+
+serveren startes med:
+
+    docker-compose up --build -d
+
+put http://192.168.1.90/ i browseren for at fange test klienten. (erstat 192.168.1.190 med jeres server)
+
+se output med:
+
+    docker-compose logs -f
+
+stop serverne med:
+
+    docker-compose down
+

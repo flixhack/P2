@@ -1,0 +1,18 @@
+version: "2.4"
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    ports:
+      - 3000:3000
+
+  klient:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    ports:
+      - 80:80
+    environment:
+      SERVER_BASE_URL: http://192.168.1.190:3000
