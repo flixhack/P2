@@ -3,6 +3,8 @@ function enableWebMidi() {
   .then(() => console.log("WebMIDI Enabled"));
  }
 
+ var queueRecordVar = 0;
+
 // Prints MIDI-IOs to console
 function logMidiIO() {
   //  Inputs
@@ -15,7 +17,7 @@ function logMidiIO() {
 var toggleLoop = 0;
 
 function togglePlay() {
-  if (toggleLoop === 0) {toggleLoop = 1; playDemo();}
+  if (toggleLoop === 0) {toggleLoop = 1; playDemo()}
   else if (toggleLoop === 1) {toggleLoop = 0;}
 }
 
@@ -30,9 +32,6 @@ async function playDemo() {
     
   let outputBus = getTextBox("playBus") - 1;
   let playArray = test;
-
-  
-  console.log(playArray);
 
   //Defining bus and channels
   let midiOutput = WebMidi.outputs[outputBus];
@@ -81,6 +80,10 @@ async function playDemo() {
   if (toggleLoop === 1) {
     playDemo();
   }
+}
+
+function queueRecord() {
+  queueRecordVar = 1;
 }
 
 function disableWebMidi() {

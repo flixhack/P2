@@ -34,8 +34,6 @@ async function generateMidi() {
   //Webmidi starts playing based on how long ago the page was loaded. We log the time the page has been opened to adjust for this
   var correctedStartTime = performance.now();
   recordMidi(inputDevice, caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord, correctedStartTime);
-  await sleep(caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord);
-  // disableWebMidiRecord();
 }
 
 //Gets the contents of an HTML input box
@@ -49,6 +47,7 @@ async function playCountIn(Score, countInNum) {
 
   for (var i = 0; i < countInNum; i++) {
     countIn[i].play();
+    console.log("BEEP");
     await sleep(caclulateTimePerQuaterNote(Score.bpm));
   }
 }
@@ -66,7 +65,6 @@ async function generateCountIn(countInNum) {
 async function recordMidi(inputDevice, amountOfTimeToRecord, correctedStartTime) {
   var enableListeners = 0;
   var outputArray = [];
-  let noteAccidental;
   var noteArray = [];
 
   WebMidi
@@ -82,85 +80,82 @@ async function recordMidi(inputDevice, amountOfTimeToRecord, correctedStartTime)
 
     const mySynth = WebMidi.inputs[inputDevice];
 
-    mySynth.channels[getTextBox("trackNumber")].addListener("noteon", e => {
-      //The accidental will return "undefined" if there is no accidental, so we need to check for that to avoid an invalid note
-
-      if (enableListeners == 1) {
-        mySynth.channels[getTextBox("trackNumber")].removeListener("noteon");
-      }
-
-      if (e.note.accidental == "#") {
-          noteAccidental = e.note.accidental;
-      }
-      else {
-          noteAccidental = "";
-      }
-
-      //Saving the values from noteon to the noteArray to keep track of active notes
-      let newNote = new Note(e.note.name + noteAccidental + e.note.octave, e.note.attack, e.timestamp - correctedStartTime, 0);
-      noteArray.push(newNote);
-    });
-
-    let recordBus = getTextBox("recordBus");
-    mySynth.channels[getTextBox("trackNumber")].addListener("noteoff", e => {
-
-      if (enableListeners == 1) {
-        mySynth.channels[getTextBox("trackNumber")].removeListener("noteoff");
-      }
-
-      var noteFound = false;
-      var i = 0;
-
-      //Finds the note that matches the noteoff event, and removes it from the active noteArray
-      while (i < noteArray.length && !noteFound) {
-        console.log("Hey! Listen!");
-        if (e.note.accidental == "#") {
-          noteAccidental = e.note.accidental;
-        }
-        else {
-          noteAccidental = "";
-        }
-        
-        if (noteArray[i].name == e.note.name + noteAccidental + e.note.octave) {
-          if (noteArray[i].accidental == undefined) {
-            noteArray[i].accidental = "";
-          }
-          noteArray[i].duration = e.timestamp - noteArray[i].startTime - correctedStartTime;
-          outputArray.push(noteArray[i]);
-          noteArray.splice(i, 1);
-          noteFound = true;
-        }
-        i++;
-      }
-      console.log(outputArray[outputArray.length-1]);
-    });
+    noteOnListener(mySynth, enableListeners, correctedStartTime, noteArray);
+    noteOffListener(mySynth, enableListeners, noteArray, correctedStartTime, outputArray);  
   }
 
   await sleep(amountOfTimeToRecord);
+  outputArray = assembleOutputArray(noteArray, correctedStartTime, outputArray);
+
+  enableListeners = 1;
+  outputArray.unshift(getTextBox("trackNumber"));
+  socket.emit("sendClientMidi", outputArray);
+}
+
+function noteOnListener(inputBus, enableListeners, correctedStartTime, noteArray) {
+  return inputBus.channels[getTextBox("trackNumber")].addListener("noteon", e => {
+    //The accidental will return "undefined" if there is no accidental, so we need to check for that to avoid an invalid note
+
+    if (enableListeners == 1) {
+      inputBus.channels[getTextBox("trackNumber")].removeListener("noteon");
+    }
+
+    if (e.note.accidental == "#") {
+        noteAccidental = e.note.accidental;
+    }
+    else {
+        noteAccidental = "";
+    }
+
+    //Saving the values from noteon to the noteArray to keep track of active notes
+    let newNote = new Note(e.note.name + noteAccidental + e.note.octave, e.note.attack, e.timestamp - correctedStartTime, 0);
+    noteArray.push(newNote);
+  });
+}
+
+function noteOffListener(mySynth, enableListeners, noteArray, correctedStartTime, outputArray) {
+  return mySynth.channels[getTextBox("trackNumber")].addListener("noteoff", e => {
+
+    if (enableListeners == 1) {
+      mySynth.channels[getTextBox("trackNumber")].removeListener("noteoff");
+    }
+
+    var noteFound = false;
+    var i = 0;
+
+    //Finds the note that matches the noteoff event, and removes it from the active noteArray
+    while (i < noteArray.length && !noteFound) {
+      if (e.note.accidental == "#") {
+        noteAccidental = e.note.accidental;
+      }
+      else {
+        noteAccidental = "";
+      }
+      
+      if (noteArray[i].name == e.note.name + noteAccidental + e.note.octave) {
+        if (noteArray[i].accidental == undefined) {
+          noteArray[i].accidental = "";
+        }
+        noteArray[i].duration = e.timestamp - noteArray[i].startTime - correctedStartTime;
+        outputArray.push(noteArray[i]);
+        noteArray.splice(i, 1);
+        noteFound = true;
+      }
+      i++;
+    }
+    console.log(outputArray[outputArray.length-1]);
+  });
+}
+
+function assembleOutputArray(noteArray, correctedStartTime, outputArray) {
   for (let i = 0; i < noteArray.length; i++) {
     console.log(noteArray[i]);
     noteArray[i].duration = performance.now() - noteArray[i].startTime - correctedStartTime;
     outputArray.push(noteArray[i]);
   }
-
-  enableListeners = 1;
-  outputArray.unshift(getTextBox("trackNumber"));
-  console.log(outputArray);
-  socket.emit("sendClientMidi", outputArray);
-  outputArray = [];
+  return outputArray;
 }
 
 function caclulateTimePerQuaterNote(bpm) {
   return 60/bpm*1000;
-}
-
-var queueRecordVar = 0;
-
-function queueRecord() {
-  queueRecordVar = 1;
-}
-
-//Disables the MIDI recording
-function disableWebMidiRecord() {
-  WebMidi.disable();
 }
