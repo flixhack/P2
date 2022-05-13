@@ -17,8 +17,13 @@ function logMidiIO() {
 var toggleLoop = 0;
 
 function togglePlay() {
-  if (toggleLoop === 0) {toggleLoop = 1; playDemo()}
-  else if (toggleLoop === 1) {toggleLoop = 0;}
+  if (toggleLoop === 0) {
+    toggleLoop = 1;
+    playDemo();
+
+    toggleMetronome = 1;
+    metronome();}
+  else if (toggleLoop === 1) {toggleLoop = 0; toggleMetronome = 0;}
 }
 
 var test;
@@ -76,6 +81,7 @@ async function playDemo() {
   await sleep(caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord);
   if (queueRecordVar === 1) {
     generateMidi();
+    console.log("Hey!");
     queueRecordVar = 0;
   }
   if (toggleLoop === 1) {
@@ -83,17 +89,32 @@ async function playDemo() {
   }
 }
 
-metronome();
+// metronome();
 
-function metronome() {
+function metronome(toggleMetronome) {
   WebMidi.enable()
-  let midiOutput = WebMidi.outputs[1];
-  const channelArray = [
+  .then(onEnabled);
+
+  async function onEnabled() {
+    let midiOutput = WebMidi.outputs[1];
+    const channelArray = [
     midiOutput.channels[16]];
-  
-  channelArray[0].playNote(C3, {duration: 100, time: "+"+0});
+    metronomeClick(channelArray);
+  }
+} 
 
-
+async function metronomeClick(channelArray) {
+  while (toggleMetronome === 1) {
+    for (let i = 1; i <= getTextBox("timeSignatureTop"); i++) {
+      if (i === 1) {
+        channelArray[0].playNote("C4", {duration: 100, time: "+"+0});
+      }
+      else {
+        channelArray[0].playNote("C3", {duration: 100, time: "+"+0});
+      }
+      await sleep(caclulateTimePerQuaterNote(getTextBox("bpm")));
+    }
+  }
 }
 
 function queueRecord() {
