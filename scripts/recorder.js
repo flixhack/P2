@@ -31,13 +31,13 @@ async function generateMidi(firstRecord) {
   if (firstRecord === 1) {
     metronome(toggleMetronome);
     //Wait while the count in is happening
-    await sleep(caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureBottom*Score.countInCount);
+    await sleep(calculateTimePerQuarterNote(Score.bpm)*Score.timeSignatureBottom*Score.countInCount);
   }
-  var inputDevice = getTextBox("recordBus") - 1;
+  var inputBus = getTextBox("recordBus") - 1;
   //Webmidi starts playing based on how long ago the page was loaded. We log the time the page has been opened to adjust for this
   var correctedStartTime = performance.now();
-  recordMidi(inputDevice, caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord, correctedStartTime);
-  await sleep(caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord, correctedStartTime);
+  recordMidi(inputBus, calculateTimePerQuarterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord, correctedStartTime);
+  await sleep(calculateTimePerQuarterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord, correctedStartTime);
   if (firstRecord === 1) {
     toggleMetronome = 0;
   }
@@ -49,7 +49,7 @@ function getTextBox(boxID) {
 }
 
 //Opens for recording a given MIDI bus
-async function recordMidi(inputDevice, amountOfTimeToRecord, correctedStartTime) {
+async function recordMidi(inputBus, amountOfTimeToRecord, correctedStartTime) {
   var enableListeners = 0;
   var outputArray = [];
   var noteArray = [];
@@ -65,10 +65,10 @@ async function recordMidi(inputDevice, amountOfTimeToRecord, correctedStartTime)
       document.body.innerHTML+= "No device detected.";
     } 
 
-    const mySynth = WebMidi.inputs[inputDevice];
+    const synth = WebMidi.inputs[inputBus];
 
-    noteOnListener(mySynth, enableListeners, correctedStartTime, noteArray);
-    noteOffListener(mySynth, enableListeners, noteArray, correctedStartTime, outputArray);  
+    noteOnListener(synth, enableListeners, correctedStartTime, noteArray);
+    noteOffListener(synth, enableListeners, noteArray, correctedStartTime, outputArray);  
   }
 
   await sleep(amountOfTimeToRecord);
@@ -100,11 +100,11 @@ function noteOnListener(inputBus, enableListeners, correctedStartTime, noteArray
   });
 }
 
-function noteOffListener(mySynth, enableListeners, noteArray, correctedStartTime, outputArray) {
-  return mySynth.channels[getTextBox("trackNumber")].addListener("noteoff", e => {
+function noteOffListener(synth, enableListeners, noteArray, correctedStartTime, outputArray) {
+  return synth.channels[getTextBox("trackNumber")].addListener("noteoff", e => {
 
     if (enableListeners == 1) {
-      mySynth.channels[getTextBox("trackNumber")].removeListener("noteoff");
+      synth.channels[getTextBox("trackNumber")].removeListener("noteoff");
     }
 
     var noteFound = false;
@@ -143,6 +143,6 @@ function assembleOutputArray(noteArray, correctedStartTime, outputArray) {
   return outputArray;
 }
 
-function caclulateTimePerQuaterNote(bpm) {
+function calculateTimePerQuarterNote(bpm) {
   return 60/bpm*1000;
 }

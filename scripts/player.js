@@ -1,15 +1,9 @@
-function enableWebMidi() {
-  WebMidi.enable()
-  .then(() => console.log("WebMIDI Enabled"));
- }
-
  var queueRecordVar = 0;
 
 // Prints MIDI-IOs to console
 function logMidiIO() {
   //  Inputs
   WebMidi.inputs.forEach(input => console.log("Input: " + input.manufacturer, input.name));
-
   //  Outputs
   WebMidi.outputs.forEach(output => console.log("Output: " + output.manufacturer, output.name));
 }
@@ -26,10 +20,10 @@ function togglePlay() {
   else if (toggleLoop === 1) {toggleLoop = 0; toggleMetronome = 0;}
 }
 
-var test;
+var serverMidiData;
 
 socket.on("sendServerMidi", function(data) {
-  test = data;
+  serverMidiData = data;
 });
 
 //  Plays the JSON file
@@ -37,7 +31,7 @@ async function play() {
 
   var Score = new ScoreInfo(getTextBox("bpm"), getTextBox("timeSignatureTop"), getTextBox("timeSignatureBottom"), getTextBox("numberOfBarsToRecord"), getTextBox("countInCount"));  
   let outputBus = getTextBox("playBus") - 1;
-  let playArray = test;
+  let playArray = serverMidiData;
 
   //Defining bus and channels
   let midiOutput = WebMidi.outputs[outputBus];
@@ -78,7 +72,7 @@ async function play() {
       }
     }
   }
-  await sleep(caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord);
+  await sleep(calculateTimePerQuarterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord);
   if (queueRecordVar === 1) {
     generateMidi(0);
     console.log("Hey!");
@@ -89,9 +83,7 @@ async function play() {
   }
 }
 
-// metronome();
-
-function metronome(toggleMetronome) {
+function metronome() {
   WebMidi.enable()
   .then(onEnabled);
 
@@ -112,15 +104,11 @@ async function metronomeClick(channelArray) {
       else {
         channelArray[0].playNote("C3", {duration: 100, time: "+"+0});
       }
-      await sleep(caclulateTimePerQuaterNote(getTextBox("bpm")));
+      await sleep(calculateTimePerQuarterNote(getTextBox("bpm")));
     }
   }
 }
 
 function queueRecord() {
   queueRecordVar = 1;
-}
-
-function disableWebMidi() {
-  WebMidi.disable();
 }
