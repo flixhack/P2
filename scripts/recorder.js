@@ -1,4 +1,4 @@
-var socket = io("http://localhost:3271");
+var socket = io("https://gentle-meadow-24148.herokuapp.com/");
 
 class Note {
   constructor(name, velocity, startTime, duration) {
@@ -23,16 +23,24 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+var toggleMetronome = 1;
+
 //Calls functions to record midi for the length of recordDuration
-async function generateMidi() {
+async function generateMidi(firstRecord) {
   var Score = new ScoreInfo(getTextBox("bpm"), getTextBox("timeSignatureTop"), getTextBox("timeSignatureBottom"), getTextBox("numberOfBarsToRecord"), getTextBox("countInCount"));
-  playCountIn(Score, Score.timeSignatureBottom*Score.countInCount);
-  //Wait while the count in is happening
-  await sleep(caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureBottom*Score.countInCount);
-  var inputDevice = getTextBox("recordBus") - 1;
+  if (firstRecord === 1) {
+    metronome(toggleMetronome);
+    //Wait while the count in is happening
+    await sleep(calculateTimePerQuarterNote(Score.bpm)*Score.timeSignatureBottom*Score.countInCount);
+  }
+  var inputBus = getTextBox("recordBus") - 1;
   //Webmidi starts playing based on how long ago the page was loaded. We log the time the page has been opened to adjust for this
   var correctedStartTime = performance.now();
-  recordMidi(inputDevice, caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord, correctedStartTime);
+  recordMidi(inputBus, calculateTimePerQuarterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord, correctedStartTime);
+  await sleep(calculateTimePerQuarterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord, correctedStartTime);
+  if (firstRecord === 1) {
+    toggleMetronome = 0;
+  }
 }
 
 //Gets the contents of an HTML input box
@@ -40,16 +48,8 @@ function getTextBox(boxID) {
   return document.getElementById(boxID).value;
 }
 
-//Plays the desired count in
-async function playCountIn(Score, countInNum) {
-  for (var i = 0; i < countInNum; i++) {
-    console.log(i + 1);
-    await sleep(caclulateTimePerQuaterNote(Score.bpm));
-  }
-}
-
 //Opens for recording a given MIDI bus
-async function recordMidi(inputDevice, amountOfTimeToRecord, correctedStartTime) {
+async function recordMidi(inputBus, amountOfTimeToRecord, correctedStartTime) {
   var enableListeners = 0;
   var outputArray = [];
   var noteArray = [];
@@ -65,10 +65,10 @@ async function recordMidi(inputDevice, amountOfTimeToRecord, correctedStartTime)
       document.body.innerHTML+= "No device detected.";
     } 
 
-    const mySynth = WebMidi.inputs[inputDevice];
+    const synth = WebMidi.inputs[inputBus];
 
-    noteOnListener(mySynth, enableListeners, correctedStartTime, noteArray);
-    noteOffListener(mySynth, enableListeners, noteArray, correctedStartTime, outputArray);  
+    noteOnListener(synth, enableListeners, correctedStartTime, noteArray);
+    noteOffListener(synth, enableListeners, noteArray, correctedStartTime, outputArray);  
   }
 
   await sleep(amountOfTimeToRecord);
@@ -100,11 +100,11 @@ function noteOnListener(inputBus, enableListeners, correctedStartTime, noteArray
   });
 }
 
-function noteOffListener(mySynth, enableListeners, noteArray, correctedStartTime, outputArray) {
-  return mySynth.channels[getTextBox("trackNumber")].addListener("noteoff", e => {
+function noteOffListener(synth, enableListeners, noteArray, correctedStartTime, outputArray) {
+  return synth.channels[getTextBox("trackNumber")].addListener("noteoff", e => {
 
     if (enableListeners == 1) {
-      mySynth.channels[getTextBox("trackNumber")].removeListener("noteoff");
+      synth.channels[getTextBox("trackNumber")].removeListener("noteoff");
     }
 
     var noteFound = false;
@@ -143,6 +143,6 @@ function assembleOutputArray(noteArray, correctedStartTime, outputArray) {
   return outputArray;
 }
 
-function caclulateTimePerQuaterNote(bpm) {
+function calculateTimePerQuarterNote(bpm) {
   return 60/bpm*1000;
 }
