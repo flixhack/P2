@@ -19,7 +19,7 @@ var toggleLoop = 0;
 function togglePlay() {
   if (toggleLoop === 0) {
     toggleLoop = 1;
-    playDemo();
+    play();
 
     toggleMetronome = 1;
     metronome();}
@@ -33,7 +33,7 @@ socket.on("sendServerMidi", function(data) {
 });
 
 //  Plays the JSON file
-async function playDemo() {
+async function play() {
 
   var Score = new ScoreInfo(getTextBox("bpm"), getTextBox("timeSignatureTop"), getTextBox("timeSignatureBottom"), getTextBox("numberOfBarsToRecord"), getTextBox("countInCount"));  
   let outputBus = getTextBox("playBus") - 1;
@@ -80,12 +80,12 @@ async function playDemo() {
   }
   await sleep(caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord);
   if (queueRecordVar === 1) {
-    generateMidi();
+    generateMidi(0);
     console.log("Hey!");
     queueRecordVar = 0;
   }
   if (toggleLoop === 1) {
-    playDemo();
+    play();
   }
 }
 

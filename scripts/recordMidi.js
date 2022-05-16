@@ -24,10 +24,9 @@ function sleep(ms) {
 }
 
 var toggleMetronome = 1;
-var firstRecord = 1;
 
 //Calls functions to record midi for the length of recordDuration
-async function generateMidi() {
+async function generateMidi(firstRecord) {
   var Score = new ScoreInfo(getTextBox("bpm"), getTextBox("timeSignatureTop"), getTextBox("timeSignatureBottom"), getTextBox("numberOfBarsToRecord"), getTextBox("countInCount"));
   if (firstRecord === 1) {
     metronome(toggleMetronome);
@@ -40,7 +39,6 @@ async function generateMidi() {
   recordMidi(inputDevice, caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord, correctedStartTime);
   await sleep(caclulateTimePerQuaterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord, correctedStartTime);
   if (firstRecord === 1) {
-    firstRecord = 0;
     toggleMetronome = 0;
   }
 }
