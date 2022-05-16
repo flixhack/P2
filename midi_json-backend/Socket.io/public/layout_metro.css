@@ -1,0 +1,76 @@
+h3 {text-align: center; justify-content: center; color: rgb(58, 16, 175)}
+#bpm-infor {text-align: center; justify-content: center}
+#bpm {font-weight: bold;font-size: small; color: rgb(13, 145, 145);}
+#bpm-number {font-weight: bold; color: blue; font-size: 20px}
+#form-setting {display: flex; text-align: center; justify-content: center}
+#decrease-bpm{width: 30px;
+    height: 30px;
+    font-size: 25px;
+    border-radius: 50%;
+    border: 1px solid rgb(49, 49, 49);
+    text-align: center;
+    cursor: pointer;
+    line-height: 28px;
+
+    -moz-border-radius: 60px;
+    -webkit-border-radius: 60px;
+}
+#decrease-bpm:hover {background: rgb(103, 157, 238); color: rgb(247, 199, 199)}
+input[type=range] {width: 15%;}
+#increase-bpm {width: 30px;
+    height: 30px;
+    font-size: 20px;
+    border-radius: 50%;
+    border: 1px solid rgb(49, 49, 49);
+    text-align: center;
+    cursor: pointer;
+    line-height: 30px;
+    font-weight: bold}
+#increase-bpm:hover {background: rgb(103, 157, 238); color: rgb(247, 199, 199);}
+#beats-measure {font-weight: bold; color: rgb(80, 117, 10);text-align: center; justify-content: center}
+#measures {display: flex; text-align: center; justify-content: center}
+#sub-beats {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid rgb(80, 117, 10);
+    text-align: center;
+    margin: 0 5px;
+    cursor: pointer;
+    justify-content: center
+}
+#sub-beats:hover {
+    background: #ff656c;
+    color: #fff;
+}
+#add-beats {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid rgb(80, 117, 10);
+    text-align: center;
+    margin: 0 5px;
+    cursor: pointer;
+    justify-content: center;
+    line-height: 20px;
+}
+#add-beats:hover {
+    background: #ff656c;
+    color: #fff;
+}
+#start {
+    width: 50px;
+    height: 50px;
+    font-size: 0.7em;
+    text-align: center;
+    background: #f83842;
+    border-radius: 50%;
+    color: #fff;
+    line-height: 50px;
+    margin: 0 auto;
+    cursor: pointer;
+}
+#start:hover {
+    background: #f37279;
+}
+

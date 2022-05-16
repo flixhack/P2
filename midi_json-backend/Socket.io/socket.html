@@ -6,7 +6,7 @@
         <title>Javascript Example</title>
         <script src="/socket.io/socket.io.js"></script>
         <link rel="stylesheet" href="layout.css" type="text/css"/>
-             
+        <link rel="stylesheet" href="layout_metro.css">   
     </head>
     <body>
         <h2 id="intro">WELCOME TO PLAY MUSIC ONLINE</h2>
@@ -87,8 +87,33 @@
 
         <div id="boxMessage1">
             <input id="message1" autocomplete="off" disabled/><button id="btnSend1" disabled>Send</button>
+        </div><br><br>
+
+        <hr  width="30%" align="center" />
+
+        <!-- METRONOME -->
+        <h3><b> METRONOME </b></h3>
+        <div class="main">
+            <div id="bpm-infor">
+                <div id="bpm">BEATS PER MINUTE</div>
+                <div id="bpm-number">140</div> 
+           </div><br>
+            <form id="form-setting">
+            
+                <div id="decrease-bpm">-</div> 
+                <input type="range" min="20" max="280" step="1" id="slider"> 
+                <div id="increase-bpm">+</div>
+            
+            </form><br>
+            <div id="beats-measure">Beats per measure</div><br>
+            <form id="measures">
+                <div id="sub-beats">-</div>
+                <div id="countBeats">4</div>
+                <div id="add-beats">+</div>
+            </form><br>
+            <div id="start">START</div>
         </div>
-       
+        
         <hr>
         <p> Our website will be connected continue from here on the same html file. 
             Json files below are used to simulate how code works. 
@@ -111,8 +136,10 @@
       </form>
     <!--Above form use to check
             don't use in project, deltete-->  
-    
+            
     </body>
+        
     <script src="handleData.js"></script>
+    <script src="metronome.js" type="module"></script>
 
 </html>
