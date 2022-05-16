@@ -1,4 +1,4 @@
-var socket = io("http://localhost:3271");
+var socket = io("http://localhost:80");
 
 class Note {
   constructor(name, velocity, startTime, duration) {
