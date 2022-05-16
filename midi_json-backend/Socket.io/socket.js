@@ -3,7 +3,7 @@ var app = express()
 app.use(express.static("scripts"))
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
-var port = 80
+var port = process.env.PORT || 3000;
 
 var trackArray = []
 io.on("connection", function(socket) {     
