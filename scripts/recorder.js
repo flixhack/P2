@@ -1,4 +1,4 @@
-var socket = io("https://gentle-meadow-24148.herokuapp.com/");
+//var socket = io("https://gentle-meadow-24148.herokuapp.com/");
 
 class Note {
   constructor(name, velocity, startTime, duration) {
@@ -143,6 +143,9 @@ function assembleOutputArray(noteArray, correctedStartTime, outputArray) {
   return outputArray;
 }
 
+//calculates the time a quaternote takes in miliseconds from beats per minute.
 function calculateTimePerQuarterNote(bpm) {
   return 60/bpm*1000;
 }
+
+module.exports = {sleep, generateMidi, getTextBox, recordMidi, noteOnListener, noteOffListener, assembleOutputArray, calculateTimePerQuarterNote, Note, ScoreInfo};

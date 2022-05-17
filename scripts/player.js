@@ -22,9 +22,9 @@ function togglePlay() {
 
 var serverMidiData;
 
-socket.on("sendServerMidi", function(data) {
-  serverMidiData = data;
-});
+//socket.on("sendServerMidi", function(data) {
+//  serverMidiData = data;
+//});
 
 //  Plays the JSON file
 async function play() {
@@ -112,3 +112,5 @@ async function metronomeClick(channelArray) {
 function queueRecord() {
   queueRecordVar = 1;
 }
+
+module.exports = {logMidiIO, togglePlay, play, metronome, metronomeClick, queueRecord};
