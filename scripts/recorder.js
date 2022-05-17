@@ -23,13 +23,11 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-var toggleMetronome = 1;
-
 //Calls functions to record midi for the length of recordDuration
 async function generateMidi(firstRecord) {
   var Score = new ScoreInfo(getTextBox("bpm"), getTextBox("timeSignatureTop"), getTextBox("timeSignatureBottom"), getTextBox("numberOfBarsToRecord"), getTextBox("countInCount"));
   if (firstRecord === 1) {
-    metronome(toggleMetronome);
+    metronome();
     //Wait while the count in is happening
     await sleep(calculateTimePerQuarterNote(Score.bpm)*Score.timeSignatureBottom*Score.countInCount);
   }
@@ -38,9 +36,6 @@ async function generateMidi(firstRecord) {
   var correctedStartTime = performance.now();
   recordMidi(inputBus, calculateTimePerQuarterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord, correctedStartTime);
   await sleep(calculateTimePerQuarterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord, correctedStartTime);
-  if (firstRecord === 1) {
-    toggleMetronome = 0;
-  }
 }
 
 //Gets the contents of an HTML input box
