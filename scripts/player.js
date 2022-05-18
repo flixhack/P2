@@ -83,7 +83,7 @@ async function play() {
   }
 }
 
-function metronome() {
+function countIn() {
   WebMidi.enable()
   .then(onEnabled);
 
@@ -95,7 +95,7 @@ function metronome() {
   }
 } 
 
-async function metronomeClick(channelArray, arrayIndex, numberOfBarsToPlay) {
+async function metronome(channelArray, arrayIndex, numberOfBarsToPlay) {
     console.log(numberOfBarsToPlay);
     for (let j = 0; j < numberOfBarsToPlay; j++) {
       for (let i = 1; i <= getTextBox("timeSignatureTop"); i++) {
