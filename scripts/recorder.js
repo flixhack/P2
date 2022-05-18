@@ -27,7 +27,7 @@ function sleep(ms) {
 async function generateMidi(firstRecord) {
   var Score = new ScoreInfo(getTextBox("bpm"), getTextBox("timeSignatureTop"), getTextBox("timeSignatureBottom"), getTextBox("numberOfBarsToRecord"), getTextBox("countInCount"));
   if (firstRecord === 1) {
-    metronome();
+    countIn();
     //Wait while the count in is happening
     await sleep(calculateTimePerQuarterNote(Score.bpm)*Score.timeSignatureBottom*Score.countInCount);
   }

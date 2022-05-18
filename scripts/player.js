@@ -53,7 +53,7 @@ async function play() {
     midiOutput.channels[15],
     midiOutput.channels[16]];
 
-    metronomeClick(channelArray, 15, getTextBox("numberOfBarsToRecord"));
+    metronome(channelArray, 15, getTextBox("numberOfBarsToRecord"));
   //  Finding out which track has the most notes
   let maxTrackLength = 0;
   for (let i = 0; i < playArray.length; i++) {
@@ -91,7 +91,7 @@ function countIn() {
     let midiOutput = WebMidi.outputs[0];
     const channelArray = [
     midiOutput.channels[16]];
-    metronomeClick(channelArray, 0, Number(getTextBox("numberOfBarsToRecord")) + 1);
+    metronome(channelArray, 0, Number(getTextBox("numberOfBarsToRecord")) + 1);
   }
 } 
 
