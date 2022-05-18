@@ -14,10 +14,8 @@ function togglePlay() {
   if (toggleLoop === 0) {
     toggleLoop = 1;
     play();
-
-    toggleMetronome = 1;
-    metronome();}
-  else if (toggleLoop === 1) {toggleLoop = 0; toggleMetronome = 0;}
+  }
+  else if (toggleLoop === 1) {toggleLoop = 0;}
 }
 
 var serverMidiData;
@@ -32,6 +30,7 @@ async function play() {
   var Score = new ScoreInfo(getTextBox("bpm"), getTextBox("timeSignatureTop"), getTextBox("timeSignatureBottom"), getTextBox("numberOfBarsToRecord"), getTextBox("countInCount"));  
   let outputBus = getTextBox("playBus") - 1;
   let playArray = serverMidiData;
+  console.log(playArray);
 
   //Defining bus and channels
   let midiOutput = WebMidi.outputs[outputBus];
@@ -54,6 +53,7 @@ async function play() {
     midiOutput.channels[15],
     midiOutput.channels[16]];
 
+    metronomeClick(channelArray, 15, getTextBox("numberOfBarsToRecord"));
   //  Finding out which track has the most notes
   let maxTrackLength = 0;
   for (let i = 0; i < playArray.length; i++) {
@@ -83,31 +83,32 @@ async function play() {
   }
 }
 
-function metronome() {
+function countIn() {
   WebMidi.enable()
   .then(onEnabled);
 
   async function onEnabled() {
-    let midiOutput = WebMidi.outputs[1];
+    let midiOutput = WebMidi.outputs[0];
     const channelArray = [
     midiOutput.channels[16]];
-    metronomeClick(channelArray);
+    metronomeClick(channelArray, 0, Number(getTextBox("numberOfBarsToRecord")) + 1);
   }
 } 
 
-async function metronomeClick(channelArray) {
-  while (toggleMetronome === 1) {
-    for (let i = 1; i <= getTextBox("timeSignatureTop"); i++) {
-      if (i === 1) {
-        channelArray[0].playNote("C4", {duration: 100, time: "+"+0});
+async function metronome(channelArray, arrayIndex, numberOfBarsToPlay) {
+    console.log(numberOfBarsToPlay);
+    for (let j = 0; j < numberOfBarsToPlay; j++) {
+      for (let i = 1; i <= getTextBox("timeSignatureTop"); i++) {
+        if (i === 1) {
+          channelArray[arrayIndex].playNote("C4", {duration: 100, time: "+"+0});
+        }
+        else {
+          channelArray[arrayIndex].playNote("C3", {duration: 100, time: "+"+0});
+        }
+        await sleep(calculateTimePerQuarterNote(getTextBox("bpm")));
       }
-      else {
-        channelArray[0].playNote("C3", {duration: 100, time: "+"+0});
-      }
-      await sleep(calculateTimePerQuarterNote(getTextBox("bpm")));
     }
   }
-}
 
 function queueRecord() {
   queueRecordVar = 1;
