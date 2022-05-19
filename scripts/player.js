@@ -22,7 +22,7 @@ socket.on("sendServerMidi", function(data) {
   serverMidiData = data;
 });
 
-//  Plays the JSON file
+//  Plays the MIDI data
 async function play() {
   var score = new ScoreInfo(getTextBox("bpm"), getTextBox("timeSignatureTop"), getTextBox("timeSignatureBottom"), getTextBox("numberOfBarsToRecord"), getTextBox("countInCount"));  
   let outputBus = getTextBox("playBus") - 1;
