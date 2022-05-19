@@ -67,8 +67,7 @@ async function recordMidi(inputBus, amountOfTimeToRecord, correctedStartTime) {
   }
 
   await sleep(amountOfTimeToRecord);
-  outputArray = assembleOutputArray(noteArray, correctedStartTime, outputArray);
-
+  
   enableListeners = 1;
   outputArray.unshift(getTextBox("trackNumber"));
   socket.emit("sendClientMidi", outputArray);
@@ -127,15 +126,6 @@ function noteOffListener(synth, enableListeners, noteArray, correctedStartTime, 
     }
     console.log(outputArray[outputArray.length-1]);
   });
-}
-
-function assembleOutputArray(noteArray, correctedStartTime, outputArray) {
-  for (let i = 0; i < noteArray.length; i++) {
-    console.log(noteArray[i]);
-    noteArray[i].duration = performance.now() - noteArray[i].startTime - correctedStartTime;
-    outputArray.push(noteArray[i]);
-  }
-  return outputArray;
 }
 
 function calculateTimePerQuarterNote(bpm) {

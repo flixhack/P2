@@ -87,7 +87,7 @@ function countIn() {
     let midiOutput = WebMidi.outputs[0];
     const channelArray = [
     midiOutput.channels[16]];
-    metronome(channelArray, 0, Number(getTextBox("numberOfBarsToRecord")) + 1);
+    metronome(channelArray, 0, Number(getTextBox("numberOfBarsToRecord")) + Number(getTextBox("countInCount")));
   }
 } 
 
