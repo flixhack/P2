@@ -1,4 +1,6 @@
- var queueRecordVar = 0;
+var queueRecordVar = 0;
+var serverMidiData;
+var toggleLoop = 0;
 
 // Prints MIDI-IOs to console
 function logMidiIO() {
@@ -8,8 +10,6 @@ function logMidiIO() {
   WebMidi.outputs.forEach(output => console.log("Output: " + output.manufacturer, output.name));
 }
 
-var toggleLoop = 0;
-
 function togglePlay() {
   if (toggleLoop === 0) {
     toggleLoop = 1;
@@ -17,8 +17,6 @@ function togglePlay() {
   }
   else if (toggleLoop === 1) {toggleLoop = 0;}
 }
-
-var serverMidiData;
 
 socket.on("sendServerMidi", function(data) {
   serverMidiData = data;
