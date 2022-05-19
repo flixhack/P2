@@ -1,4 +1,6 @@
- var queueRecordVar = 0;
+var queueRecordVar = 0;
+var serverMidiData;
+var toggleLoop = 0;
 
 // Prints MIDI-IOs to console
 function logMidiIO() {
@@ -8,8 +10,6 @@ function logMidiIO() {
   WebMidi.outputs.forEach(output => console.log("Output: " + output.manufacturer, output.name));
 }
 
-var toggleLoop = 0;
-
 function togglePlay() {
   if (toggleLoop === 0) {
     toggleLoop = 1;
@@ -18,16 +18,13 @@ function togglePlay() {
   else if (toggleLoop === 1) {toggleLoop = 0;}
 }
 
-var serverMidiData;
-
 socket.on("sendServerMidi", function(data) {
   serverMidiData = data;
 });
 
 //  Plays the JSON file
 async function play() {
-
-  var Score = new ScoreInfo(getTextBox("bpm"), getTextBox("timeSignatureTop"), getTextBox("timeSignatureBottom"), getTextBox("numberOfBarsToRecord"), getTextBox("countInCount"));  
+  var score = new ScoreInfo(getTextBox("bpm"), getTextBox("timeSignatureTop"), getTextBox("timeSignatureBottom"), getTextBox("numberOfBarsToRecord"), getTextBox("countInCount"));  
   let outputBus = getTextBox("playBus") - 1;
   let playArray = serverMidiData;
   console.log(playArray);
@@ -72,10 +69,9 @@ async function play() {
       }
     }
   }
-  await sleep(calculateTimePerQuarterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord);
+  await sleep(calculateTimePerQuarterNote(score.bpm)*score.timeSignatureTop*score.numberOfBarsToRecord);
   if (queueRecordVar === 1) {
     generateMidi(0);
-    console.log("Hey!");
     queueRecordVar = 0;
   }
   if (toggleLoop === 1) {
@@ -96,19 +92,18 @@ function countIn() {
 } 
 
 async function metronome(channelArray, arrayIndex, numberOfBarsToPlay) {
-    console.log(numberOfBarsToPlay);
-    for (let j = 0; j < numberOfBarsToPlay; j++) {
-      for (let i = 1; i <= getTextBox("timeSignatureTop"); i++) {
-        if (i === 1) {
-          channelArray[arrayIndex].playNote("C4", {duration: 100, time: "+"+0});
-        }
-        else {
-          channelArray[arrayIndex].playNote("C3", {duration: 100, time: "+"+0});
-        }
-        await sleep(calculateTimePerQuarterNote(getTextBox("bpm")));
+  for (let j = 0; j < numberOfBarsToPlay; j++) {
+    for (let i = 1; i <= getTextBox("timeSignatureTop"); i++) {
+      if (i === 1) {
+        channelArray[arrayIndex].playNote("C4", {duration: 100, time: "+"+0});
       }
+      else {
+        channelArray[arrayIndex].playNote("C3", {duration: 100, time: "+"+0});
+      }
+      await sleep(calculateTimePerQuarterNote(getTextBox("bpm")));
     }
   }
+}
 
 function queueRecord() {
   queueRecordVar = 1;

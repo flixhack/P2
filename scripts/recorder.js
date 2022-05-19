@@ -1,4 +1,4 @@
-var socket = io("https://gentle-meadow-24148.herokuapp.com/");
+var socket = io("localhost:3000");
 
 class Note {
   constructor(name, velocity, startTime, duration) {
@@ -25,17 +25,17 @@ function sleep(ms) {
 
 //Calls functions to record midi for the length of recordDuration
 async function generateMidi(firstRecord) {
-  var Score = new ScoreInfo(getTextBox("bpm"), getTextBox("timeSignatureTop"), getTextBox("timeSignatureBottom"), getTextBox("numberOfBarsToRecord"), getTextBox("countInCount"));
+  var score = new ScoreInfo(getTextBox("bpm"), getTextBox("timeSignatureTop"), getTextBox("timeSignatureBottom"), getTextBox("numberOfBarsToRecord"), getTextBox("countInCount"));
   if (firstRecord === 1) {
     countIn();
     //Wait while the count in is happening
-    await sleep(calculateTimePerQuarterNote(Score.bpm)*Score.timeSignatureBottom*Score.countInCount);
+    await sleep(calculateTimePerQuarterNote(score.bpm)*score.timeSignatureBottom*score.countInCount);
   }
   var inputBus = getTextBox("recordBus") - 1;
   //Webmidi starts playing based on how long ago the page was loaded. We log the time the page has been opened to adjust for this
   var correctedStartTime = performance.now();
-  recordMidi(inputBus, calculateTimePerQuarterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord, correctedStartTime);
-  await sleep(calculateTimePerQuarterNote(Score.bpm)*Score.timeSignatureTop*Score.numberOfBarsToRecord, correctedStartTime);
+  recordMidi(inputBus, calculateTimePerQuarterNote(score.bpm)*score.timeSignatureTop*score.numberOfBarsToRecord, correctedStartTime);
+  await sleep(calculateTimePerQuarterNote(score.bpm)*score.timeSignatureTop*score.numberOfBarsToRecord, correctedStartTime);
 }
 
 //Gets the contents of an HTML input box
