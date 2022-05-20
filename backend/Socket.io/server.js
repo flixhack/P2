@@ -7,19 +7,10 @@ var port = process.env.PORT || 3000;
 
 var trackArray = []
 io.on("connection", function(socket) {     
-	console.log('a user connected,'+' id:' + socket.id)  // check connect
-	socket.on('sendClientMidi', function(data){  // listen client
-		console.log(trackArray);
-		console.log(trackArray.length);
-		for (let i = 0; i < trackArray.length; i++) {
-			console.log(data[0]);
-		}
-		
-		trackArray.push(data);
-
-		// console.log(trackArray)
-		setTimeout(() => {io.sockets.emit('sendServerMidi', trackArray)}, 2000)
-		//setTimeout(() => {trackArray=[]}, 12000)  // delete arrays elementes
+	console.log('a user connected,'+' id:' + socket.id);  // check connect
+	socket.on('sendClientMidi', function(data){  // listen client	
+	trackArray.push(data);
+	setTimeout(() => {io.sockets.emit('sendServerMidi', trackArray)}, 2000);
 	});
 });
  
@@ -29,6 +20,6 @@ app.get('/', function(req, res){
 });
 
 http.listen(port, function(){
-	console.log(`App listening at http://localhost:${port}`)
+	console.log(`App listening at http://localhost:${port}`);
 });
 
