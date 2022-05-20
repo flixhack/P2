@@ -8,10 +8,9 @@ var port = process.env.PORT || 3000;
 var trackArray = []
 io.on("connection", function(socket) {     
 	console.log('a user connected,'+' id:' + socket.id);  // check connect
-	socket.on('sendClientMidi', function(data){  // listen client
-		
-		trackArray.push(data);
-		setTimeout(() => {io.sockets.emit('sendServerMidi', trackArray)}, 2000);
+	socket.on('sendClientMidi', function(data){  // listen client	
+	trackArray.push(data);
+	setTimeout(() => {io.sockets.emit('sendServerMidi', trackArray)}, 2000);
 	});
 });
  
