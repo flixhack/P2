@@ -58,27 +58,27 @@ async function recordMidi(inputBus, amountOfTimeToRecord, correctedStartTime) {
     //Error message if no MIDI devices are found
     if (WebMidi.inputs.length < 1) {
       document.body.innerHTML+= "No device detected.";
-    } 
+    }
 
     const synth = WebMidi.inputs[inputBus];
 
     noteOnListener(synth, enableListeners, correctedStartTime, noteArray);
-    noteOffListener(synth, enableListeners, noteArray, correctedStartTime, outputArray);  
+    noteOffListener(synth, enableListeners, noteArray, correctedStartTime, outputArray);
   }
 
   await sleep(amountOfTimeToRecord);
-  
+
   enableListeners = 1;
   outputArray.unshift(getTextBox("trackNumber"));
   socket.emit("sendClientMidi", outputArray);
 }
 
-function noteOnListener(inputBus, enableListeners, correctedStartTime, noteArray) {
-  return inputBus.channels[getTextBox("trackNumber")].addListener("noteon", e => {
+function noteOnListener(synth, enableListeners, correctedStartTime, noteArray) {
+  return synth.channels[getTextBox("trackNumber")].addListener("noteon", e => {
     //The accidental will return "undefined" if there is no accidental, so we need to check for that to avoid an invalid note
 
     if (enableListeners == 1) {
-      inputBus.channels[getTextBox("trackNumber")].removeListener("noteon");
+      synth.channels[getTextBox("trackNumber")].removeListener("noteon");
     }
 
     if (e.note.accidental == "#") {
@@ -112,7 +112,7 @@ function noteOffListener(synth, enableListeners, noteArray, correctedStartTime, 
       else {
         noteAccidental = "";
       }
-      
+
       if (noteArray[i].name == e.note.name + noteAccidental + e.note.octave) {
         if (noteArray[i].accidental == undefined) {
           noteArray[i].accidental = "";
