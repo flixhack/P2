@@ -1,4 +1,4 @@
-var socket = io("localhost:3000");
+var socket = io("https://gentle-meadow-24148.herokuapp.com/");
 
 class Note {
   constructor(name, velocity, startTime, duration) {
